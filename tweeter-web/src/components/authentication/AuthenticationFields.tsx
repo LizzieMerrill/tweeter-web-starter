@@ -2,7 +2,7 @@ import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 
 interface Props {
-    doEntry: () => void;
+    doEntry: () => Promise<void>;
 }
 
 const AuthenticationFields = (props: Props) => {
