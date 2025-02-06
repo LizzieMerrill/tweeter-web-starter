@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.css";
 
 interface Props {
     doEntry: () => Promise<void>;
+    entryOnEnter: (event: React.KeyboardEvent<HTMLElement>) => void;
 }
 
 const AuthenticationFields = (props: Props) => {
@@ -11,7 +12,7 @@ const AuthenticationFields = (props: Props) => {
     const checkSubmitButtonStatus = (): boolean => {
         return !alias || !password;
       };
-    const loginOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
+    const entryOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
         if (event.key == "Enter" && !checkSubmitButtonStatus()) {
           props.doEntry();
         }
@@ -25,7 +26,7 @@ const AuthenticationFields = (props: Props) => {
           size={50}
           id="aliasInput"
           placeholder="name@example.com"
-          onKeyDown={loginOnEnter}
+          onKeyDown={entryOnEnter}
           onChange={(event) => setAlias(event.target.value)}
         />
         <label htmlFor="aliasInput">Alias</label>
@@ -36,7 +37,7 @@ const AuthenticationFields = (props: Props) => {
           className="form-control bottom"
           id="passwordInput"
           placeholder="Password"
-          onKeyDown={loginOnEnter}
+          onKeyDown={entryOnEnter}
           onChange={(event) => setPassword(event.target.value)}
         />
         <label htmlFor="passwordInput">Password</label>

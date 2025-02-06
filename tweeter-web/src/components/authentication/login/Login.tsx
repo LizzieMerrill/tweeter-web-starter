@@ -70,7 +70,7 @@ const Login = (props: Props) => {
   const inputFieldGenerator = () => {
     return (
       <>
-      <AuthenticationFields doEntry={doLogin}/>
+      <AuthenticationFields doEntry={doLogin} entryOnEnter={loginOnEnter}/>
       </>
     );
   };
