@@ -12,11 +12,6 @@ const AuthenticationFields = (props: Props) => {
     const checkSubmitButtonStatus = (): boolean => {
         return !alias || !password;
       };
-    const entryOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
-        if (event.key == "Enter" && !checkSubmitButtonStatus()) {
-          props.doEntry();
-        }
-      };
     return (
         <>
         <div className="form-floating">
@@ -26,7 +21,7 @@ const AuthenticationFields = (props: Props) => {
           size={50}
           id="aliasInput"
           placeholder="name@example.com"
-          onKeyDown={entryOnEnter}
+          onKeyDown={props.entryOnEnter}
           onChange={(event) => setAlias(event.target.value)}
         />
         <label htmlFor="aliasInput">Alias</label>
@@ -37,7 +32,7 @@ const AuthenticationFields = (props: Props) => {
           className="form-control bottom"
           id="passwordInput"
           placeholder="Password"
-          onKeyDown={entryOnEnter}
+          onKeyDown={props.entryOnEnter}
           onChange={(event) => setPassword(event.target.value)}
         />
         <label htmlFor="passwordInput">Password</label>
