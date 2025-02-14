@@ -10,6 +10,7 @@ import useUserInfoHook from "../../userInfo/UserInfoHook";
 
 interface Props {
   originalUrl?: string;
+  //presenterGenerator: (view: StatusItemView) => StatusItemPresenter;
 }
 
 const Login = (props: Props) => {
@@ -54,18 +55,26 @@ const Login = (props: Props) => {
     }
   };
 
-  const login = async (
-    alias: string,
-    password: string
-  ): Promise<[User, AuthToken]> => {
-    const user = FakeData.instance.firstUser;
+  // const login = async (
+  //   alias: string,
+  //   password: string
+  // ): Promise<[User, AuthToken]> => {
+  //   const user = FakeData.instance.firstUser;
 
-    if (user === null) {
-      throw new Error("Invalid alias or password");
-    }
+  //   if (user === null) {
+  //     throw new Error("Invalid alias or password");
+  //   }
 
-    return [user, FakeData.instance.authToken];
-  };
+  //   return [user, FakeData.instance.authToken];
+  // };
+
+      const listener: AuthView = {
+        addItems: (newItems: Status[]) =>
+          setNewItems(newItems),
+        displayErrorMessage: displayErrorMessage
+      }
+  
+      const [presenter] = useState(props.presenterGenerator(listener));
 
   const inputFieldGenerator = () => {
     return (
