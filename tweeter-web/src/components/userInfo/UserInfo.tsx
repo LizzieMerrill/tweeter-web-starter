@@ -118,7 +118,6 @@ const UserInfo = (props: Props) => {
     await new Promise((f) => setTimeout(f, 2000));
 
     // TODO: Call the server
-
     const followerCount = await presenter.getFollowerCount(authToken, userToFollow);
     const followeeCount = await presenter.getFolloweeCount(authToken, userToFollow);
 
@@ -163,7 +162,6 @@ const UserInfo = (props: Props) => {
     await new Promise((f) => setTimeout(f, 2000));
 
     // TODO: Call the server
-
     const followerCount = await presenter.getFollowerCount(authToken, userToUnfollow);
     const followeeCount = await presenter.getFolloweeCount(authToken, userToUnfollow);
 
