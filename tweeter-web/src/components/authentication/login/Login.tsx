@@ -7,10 +7,11 @@ import { AuthToken, FakeData, User } from "tweeter-shared";
 import useToastListener from "../../toaster/ToastListenerHook";
 import AuthenticationFields from "../AuthenticationFields";
 import useUserInfoHook from "../../userInfo/UserInfoHook";
+import { AuthPresenter, AuthView } from "../../../presenters/AuthPresenter";
 
 interface Props {
   originalUrl?: string;
-  //presenterGenerator: (view: StatusItemView) => StatusItemPresenter;
+  presenterGenerator: (view: AuthView) => AuthPresenter;
 }
 
 const Login = (props: Props) => {
@@ -29,7 +30,7 @@ const Login = (props: Props) => {
 
   const loginOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key == "Enter" && !checkSubmitButtonStatus()) {
-      doLogin();
+      presenter.doLogin();
     }
   };
 

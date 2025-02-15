@@ -3,7 +3,10 @@ export interface AuthView{
 }
 
 export abstract class AuthPresenter{
-    
+    private _view: AuthView;
+    protected constructor(view: AuthView) {
+        this._view = view;
+    }
 }
 
 // import { AuthToken, User } from "tweeter-shared";

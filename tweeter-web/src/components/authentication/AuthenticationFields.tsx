@@ -1,4 +1,5 @@
 import "bootstrap/dist/css/bootstrap.css";
+import { AuthPresenter, AuthView } from "../../presenters/AuthPresenter";
 
 interface Props {
     alias: string;
@@ -6,6 +7,7 @@ interface Props {
     password: string;
     setPassword: (value: string) => void;
     doEntry: () => Promise<void>;
+    presenterGenerator: (view: AuthView) => AuthPresenter;
 }
 
 const AuthenticationFields = ({ alias, setAlias, password, setPassword, doEntry }: Props) => {
