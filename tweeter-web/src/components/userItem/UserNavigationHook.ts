@@ -1,8 +1,13 @@
-import { AuthToken, FakeData, User } from "tweeter-shared";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfoHook from "../userInfo/UserInfoHook";
+import { UserNavigationPresenter, UserNavigationView } from "../../presenters/UserNavigationPresenter";
+import { useState } from "react";
 
-const useUserNavigationHook = () =>{
+interface Props {
+  navPresenterGenerator: (view: UserNavigationView) => UserNavigationPresenter;
+}
+
+const useUserNavigationHook = (props: Props) =>{
     const { displayErrorMessage } = useToastListener();
       const { setDisplayedUser, currentUser, authToken } =
         useUserInfoHook();
@@ -12,7 +17,7 @@ const useUserNavigationHook = () =>{
             try {
               const alias = extractAlias(event.target.toString());
         
-              const user = await getUser(authToken!, alias);
+              const user = await presenter.getUser(authToken!, alias);
         
               if (!!user) {
                 if (currentUser!.equals(user)) {
@@ -30,14 +35,13 @@ const useUserNavigationHook = () =>{
         const index = value.indexOf("@");
         return value.substring(index);
       };
-    
-      const getUser = async (
-        authToken: AuthToken,
-        alias: string
-      ): Promise<User | null> => {
-        // TODO: Replace with the result of calling server
-        return FakeData.instance.findUserByAlias(alias);
-      };
+
+          const listener: UserNavigationView = {
+            displayErrorMessage: displayErrorMessage
+          }
+          
+          const [presenter] = useState(props.navPresenterGenerator(listener));
+
     return navigateToUser;
 }
 export default useUserNavigationHook;

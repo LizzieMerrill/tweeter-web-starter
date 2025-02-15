@@ -1,11 +1,13 @@
-import { AuthToken, FakeData, Status, User, Type } from "tweeter-shared";
+import { Status, Type } from "tweeter-shared";
 import { Link } from "react-router-dom";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfoHook from "../userInfo/UserInfoHook";
 import useUserNavigationHook from "../userItem/UserNavigationHook";
+import { UserNavigationPresenter, UserNavigationView } from "../../presenters/UserNavigationPresenter";
 
 interface Props {
   status: Status;
+  navPresenterGenerator: (view: UserNavigationView) => UserNavigationPresenter;
 }
 
 const Post = (props: Props) => {
@@ -13,7 +15,7 @@ const Post = (props: Props) => {
     useUserInfoHook();
   const { displayErrorMessage } = useToastListener();
 
-  const navigateToUser = useUserNavigationHook();
+  const navigateToUser = useUserNavigationHook(props);
 
   return (
     <>

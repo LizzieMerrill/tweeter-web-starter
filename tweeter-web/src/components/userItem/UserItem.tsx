@@ -1,11 +1,13 @@
-import { AuthToken, FakeData, User } from "tweeter-shared";
+import { User } from "tweeter-shared";
 import { Link } from "react-router-dom";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfoHook from "../userInfo/UserInfoHook";
 import useUserNavigationHook from "./UserNavigationHook";
+import { UserNavigationPresenter, UserNavigationView } from "../../presenters/UserNavigationPresenter";
 
 interface Props {
   value: User;
+  navPresenterGenerator: (view: UserNavigationView) => UserNavigationPresenter;
 }
 
 const UserItem = (props: Props) => {
@@ -13,7 +15,7 @@ const UserItem = (props: Props) => {
   const { setDisplayedUser, currentUser, authToken } =
     useUserInfoHook();
 
-    const navigateToUser = useUserNavigationHook();
+    const navigateToUser = useUserNavigationHook(props);
 
   return (
     <div className="col bg-light mx-0 px-0">

@@ -1,5 +1,10 @@
+import { AuthToken, User } from "tweeter-shared";
 import { UserService } from "../model/UserService";
 import { AuthPresenter, AuthView } from "./AuthPresenter";
+
+export interface LoginView{
+
+}
 
 export class LoginPresenter extends AuthPresenter {
     private userService: UserService;
@@ -7,28 +12,12 @@ export class LoginPresenter extends AuthPresenter {
         super(view);
         this.userService = new UserService();
     }
-    
-    public async doLogin () {
-        try {
-          setIsLoading(true);
-    
-          const [user, authToken] = await this.userService.login(alias, password);
-    
-          updateUserInfo(user, user, authToken, rememberMe);
-    
-          if (!!props.originalUrl) {
-            navigate(props.originalUrl);
-          } else {
-            navigate("/");
-          }
-        } catch (error) {
-          displayErrorMessage(
-            `Failed to log user in because of exception: ${error}`
-          );
-        } finally {
-          setIsLoading(false);
-        }
-      };
+    public async login (
+    alias: string,
+    password: string
+  ): Promise<[User, AuthToken]> {
+    return this.userService.login(alias, password);
+  };
 }
 
 

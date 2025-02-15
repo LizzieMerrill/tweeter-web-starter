@@ -5,9 +5,11 @@ import UserItem from "../userItem/UserItem";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfoHook from "../userInfo/UserInfoHook";
 import { UserItemPresenter, UserItemView } from "../../presenters/UserItemPresenter";
+import { UserNavigationPresenter, UserNavigationView } from "../../presenters/UserNavigationPresenter";
 
 interface Props {
   presenterGenerator: (view: UserItemView) => UserItemPresenter;
+  navPresenterGenerator: (view: UserNavigationView) => UserNavigationPresenter;
 }
 
 const UserItemScroller = (props: Props) => {
@@ -71,7 +73,7 @@ const UserItemScroller = (props: Props) => {
             key={index}
             className="row mb-3 mx-0 px-0 border rounded bg-white"
           >
-            <UserItem value={item} />
+            <UserItem value={item} navPresenterGenerator={props.navPresenterGenerator}/>
           </div>
         ))}
       </InfiniteScroll>

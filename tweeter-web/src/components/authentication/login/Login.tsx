@@ -3,15 +3,14 @@ import "bootstrap/dist/css/bootstrap.css";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
-import { AuthToken, FakeData, User } from "tweeter-shared";
 import useToastListener from "../../toaster/ToastListenerHook";
 import AuthenticationFields from "../AuthenticationFields";
 import useUserInfoHook from "../../userInfo/UserInfoHook";
-import { AuthPresenter, AuthView } from "../../../presenters/AuthPresenter";
+import { LoginPresenter, LoginView } from "../../../presenters/LoginPresenter";
 
 interface Props {
   originalUrl?: string;
-  presenterGenerator: (view: AuthView) => AuthPresenter;
+  presenterGenerator: (view: LoginView) => LoginPresenter;
 }
 
 const Login = (props: Props) => {
@@ -30,7 +29,7 @@ const Login = (props: Props) => {
 
   const loginOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key == "Enter" && !checkSubmitButtonStatus()) {
-      presenter.doLogin();
+      doLogin();
     }
   };
 
@@ -38,7 +37,7 @@ const Login = (props: Props) => {
     try {
       setIsLoading(true);
 
-      const [user, authToken] = await login(alias, password);
+      const [user, authToken] = await presenter.login(alias, password);
 
       updateUserInfo(user, user, authToken, rememberMe);
 
@@ -69,14 +68,6 @@ const Login = (props: Props) => {
   //   return [user, FakeData.instance.authToken];
   // };
 
-      const listener: AuthView = {
-        addItems: (newItems: Status[]) =>
-          setNewItems(newItems),
-        displayErrorMessage: displayErrorMessage
-      }
-  
-      const [presenter] = useState(props.presenterGenerator(listener));
-
   const inputFieldGenerator = () => {
     return (
       <>
@@ -98,6 +89,12 @@ const Login = (props: Props) => {
       </div>
     );
   };
+
+  const listener: LoginView = {
+    displayErrorMessage: displayErrorMessage
+  }
+  
+  const [presenter] = useState(props.presenterGenerator(listener));
 
   return (
     <AuthenticationFormLayout

@@ -1,5 +1,10 @@
+import { AuthToken, User } from "tweeter-shared";
 import { UserService } from "../model/UserService";
 import { AuthPresenter, AuthView } from "./AuthPresenter";
+
+export interface RegisterView{
+
+}
 
 export class RegisterPresenter extends AuthPresenter {
     private userService: UserService;
@@ -7,6 +12,16 @@ export class RegisterPresenter extends AuthPresenter {
         super(view);
         this.userService = new UserService();
     }
+    public async register (
+        firstName: string,
+        lastName: string,
+        alias: string,
+        password: string,
+        userImageBytes: Uint8Array,
+        imageFileExtension: string
+    ): Promise<[User, AuthToken]> {
+        return this.userService.register(firstName, lastName, alias, password, userImageBytes, imageFileExtension);
+    };
 }
 
 

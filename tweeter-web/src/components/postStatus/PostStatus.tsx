@@ -1,10 +1,15 @@
 import "./PostStatus.css";
 import { useState } from "react";
-import { AuthToken, Status } from "tweeter-shared";
+import { Status } from "tweeter-shared";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfoHook from "../userInfo/UserInfoHook";
+import { PostStatusPresenter, PostStatusView } from "../../presenters/PostStatusPresenter";
 
-const PostStatus = () => {
+interface Props{
+  presenterGenerator: (view: PostStatusView) => PostStatusPresenter;
+}
+
+const PostStatus = (props: Props) => {
   const { displayErrorMessage, displayInfoMessage, clearLastInfoMessage } =
     useToastListener();
 
@@ -21,7 +26,7 @@ const PostStatus = () => {
 
       const status = new Status(post, currentUser!, Date.now());
 
-      await postStatus(authToken!, status);
+      await presenter.postStatus(authToken!, status);
 
       setPost("");
       displayInfoMessage("Status posted!", 2000);
@@ -35,16 +40,6 @@ const PostStatus = () => {
     }
   };
 
-  const postStatus = async (
-    authToken: AuthToken,
-    newStatus: Status
-  ): Promise<void> => {
-    // Pause so we can see the logging out message. Remove when connected to the server
-    await new Promise((f) => setTimeout(f, 2000));
-
-    // TODO: Call the server to post the status
-  };
-
   const clearPost = (event: React.MouseEvent) => {
     event.preventDefault();
     setPost("");
@@ -53,6 +48,12 @@ const PostStatus = () => {
   const checkButtonStatus: () => boolean = () => {
     return !post.trim() || !authToken || !currentUser;
   };
+
+    const listener: PostStatusView = {
+      displayErrorMessage: displayErrorMessage
+    }
+    
+    const [presenter] = useState(props.presenterGenerator(listener));
 
   return (
     <div className={isLoading ? "loading" : ""}>
