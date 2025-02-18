@@ -1,6 +1,7 @@
 import { AuthToken, User } from "tweeter-shared";
 import { UserService } from "../model/UserService";
 import { AuthPresenter, AuthView } from "./AuthPresenter";
+import { Buffer } from "buffer";
 
 export interface RegisterView{
 
@@ -8,6 +9,9 @@ export interface RegisterView{
 
 export class RegisterPresenter extends AuthPresenter {
     private userService: UserService;
+    public imageUrl = <string>("");
+    public imageBytes = <Uint8Array>(new Uint8Array());
+    public imageFileExtension = <string>("");
     public constructor(view: AuthView) {
         super(view);
         this.userService = new UserService();
@@ -22,37 +26,39 @@ export class RegisterPresenter extends AuthPresenter {
     ): Promise<[User, AuthToken]> {
         return this.userService.register(firstName, lastName, alias, password, userImageBytes, imageFileExtension);
     };
+  public handleImageFile (file: File | undefined) {
+    if (file) {
+      this.imageUrl = URL.createObjectURL(file);
+
+      const reader = new FileReader();
+      reader.onload = (event: ProgressEvent<FileReader>) => {
+        const imageStringBase64 = event.target?.result as string;
+
+        // Remove unnecessary file metadata from the start of the string.
+        const imageStringBase64BufferContents =
+          imageStringBase64.split("base64,")[1];
+
+        const bytes: Uint8Array = Buffer.from(
+          imageStringBase64BufferContents,
+          "base64"
+        );
+
+        this.imageBytes = bytes;
+      };
+      reader.readAsDataURL(file);
+
+      // Set image file extension (and move to a separate method)
+      const fileExtension = this.getFileExtension(file);
+      if (fileExtension) {
+        this.imageFileExtension = fileExtension;
+      }
+    } else {
+      this.imageUrl = "";
+      this.imageBytes = new Uint8Array();
+    }
+  };
+
+  public getFileExtension (file: File): string | undefined {
+    return file.name.split(".").pop();
+  };
 }
-
-
-// import { AuthToken } from 'tweeter-shared';
-// import { FollowService } from '../model/FollowService';
-// import { UserItemPresenter, UserItemView } from './UserItemPresenter';
-
-// export const PAGE_SIZE = 10;
-
-// export class FolloweePresenter extends UserItemPresenter {
-//     private followService: FollowService;
-//     public constructor(view: UserItemView) {
-//         super(view);
-//         this.followService = new FollowService();
-//     }
-//       public async loadMoreItems(authToken: AuthToken, userAlias: string) {
-//         try {
-//           const [newItems, hasMore] = await this.followService.loadMoreFollowees(
-//             authToken,
-//             userAlias,
-//             PAGE_SIZE,
-//             this.lastItem
-//           );
-    
-//           this.hasMoreItems = hasMore;
-//           this.lastItem = newItems[newItems.length - 1];
-//           this.view.addItems(newItems);
-//         } catch (error) {
-//           this.view.displayErrorMessage(
-//             `Failed to load followees because of exception: ${error}`
-//           );
-//         }
-//       };
-// }

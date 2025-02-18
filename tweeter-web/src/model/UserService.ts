@@ -2,6 +2,7 @@ import { Buffer } from "buffer";
 import { AuthToken, FakeData, User } from "tweeter-shared";
 
 export class UserService {
+  
   //login
   public async login(
     alias: string,
@@ -15,6 +16,7 @@ export class UserService {
     
     return [user, FakeData.instance.authToken];
   };
+  
   //register
     public async register (
       firstName: string,

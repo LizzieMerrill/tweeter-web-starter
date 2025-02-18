@@ -27,12 +27,6 @@ const Login = (props: Props) => {
     return !alias || !password;
   };
 
-  const loginOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
-    if (event.key == "Enter" && !checkSubmitButtonStatus()) {
-      doLogin();
-    }
-  };
-
   const doLogin = async () => {
     try {
       setIsLoading(true);
@@ -54,19 +48,6 @@ const Login = (props: Props) => {
       setIsLoading(false);
     }
   };
-
-  // const login = async (
-  //   alias: string,
-  //   password: string
-  // ): Promise<[User, AuthToken]> => {
-  //   const user = FakeData.instance.firstUser;
-
-  //   if (user === null) {
-  //     throw new Error("Invalid alias or password");
-  //   }
-
-  //   return [user, FakeData.instance.authToken];
-  // };
 
   const inputFieldGenerator = () => {
     return (
