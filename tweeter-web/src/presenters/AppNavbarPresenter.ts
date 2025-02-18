@@ -26,6 +26,7 @@ export class AppNavbarPresenter {
     
           this.view.clearLastInfoMessage();
           this.view.clearUserInfo();
+          window.location.href = "/login";
         } catch (error) {
           this.view.displayErrorMessage(
             `Failed to log user out because of exception: ${error}`
