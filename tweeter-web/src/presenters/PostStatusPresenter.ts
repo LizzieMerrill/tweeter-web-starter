@@ -17,13 +17,6 @@ export class PostStatusPresenter {
         this.statusService = new StatusService();
         this.view = view;
     }
-    public async postStatus(
-        authToken: AuthToken,
-        newStatus: Status
-    ): Promise<void> {        
-          // TODO: Call the server to post the status
-          this.statusService.postStatus(authToken, newStatus);
-    };
 
     public async submitPost(authToken: AuthToken, postText: string, currentUser: User): Promise<void> {
         try {
@@ -46,27 +39,4 @@ export class PostStatusPresenter {
           this.view.clearLastInfoMessage();
         }
       }
-
-    // public async submitPost (authToken: AuthToken, postText: string, currentUser: string) {
-    //     event.preventDefault();
-    
-    //     try {
-    //       setIsLoading(true);
-    //       this.view.displayInfoMessage("Posting status...", 0);
-    
-    //       const status = new Status(post, currentUser!, Date.now());
-    
-    //       await this.postStatus(authToken!, status);
-    
-    //       setPost("");
-    //       this.view.displayInfoMessage("Status posted!", 2000);
-    //     } catch (error) {
-    //       this.view.displayErrorMessage(
-    //         `Failed to post the status because of exception: ${error}`
-    //       );
-    //     } finally {
-    //       this.view.clearLastInfoMessage();
-    //       setIsLoading(false);
-    //     }
-    // };
 }
