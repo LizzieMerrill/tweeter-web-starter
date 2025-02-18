@@ -1,11 +1,12 @@
 import "./AppNavbar.css";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { NavLink, useLocation } from "react-router-dom";
+import { Navigate, NavLink, useLocation, useNavigate } from "react-router-dom";
 import Image from "react-bootstrap/Image";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfoHook from "../userInfo/UserInfoHook";
 import { AppNavbarPresenter, AppNavbarView } from "../../presenters/AppNavbarPresenter";
 import { useState } from "react";
+
 
 interface Props {
   presenterGenerator: (view: AppNavbarView) => AppNavbarPresenter;
@@ -16,6 +17,7 @@ const AppNavbar = (props: Props) => {
   const { authToken, clearUserInfo } = useUserInfoHook();
   const { displayInfoMessage, displayErrorMessage, clearLastInfoMessage } =
     useToastListener();
+    const navigate = useNavigate();
 
     const listener: AppNavbarView = {
       displayErrorMessage: displayErrorMessage,
@@ -67,7 +69,8 @@ const AppNavbar = (props: Props) => {
               <NavLink to="/followers">Followers</NavLink>
             </Nav.Item>
             <Nav.Item>
-              <NavLink id="logout" onClick={presenter.logOut} to={location.pathname}>
+            {/* onClick={presenter.logOut}  */}
+              <NavLink id="logout" onClick={() => {presenter.logOut().then(() => navigate("/login"))}} to={location.pathname}> 
                 Logout
               </NavLink>
             </Nav.Item>
