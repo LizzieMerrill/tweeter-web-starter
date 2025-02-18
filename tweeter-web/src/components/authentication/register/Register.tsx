@@ -17,6 +17,8 @@ const Register = (props: Props) => {
   const [lastName, setLastName] = useState("");
   const [alias, setAlias] = useState("");
   const [password, setPassword] = useState("");
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageFileExtension, setImageFileExtension] = useState<string>("");
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,8 +32,8 @@ const Register = (props: Props) => {
       !lastName ||
       !alias ||
       !password ||
-      !presenter.imageUrl ||
-      !presenter.imageFileExtension
+      !imageUrl ||
+      !imageFileExtension
     );
   };
 
@@ -43,7 +45,11 @@ const Register = (props: Props) => {
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    presenter.handleImageFile(file);
+    if (file) {
+      setImageUrl(URL.createObjectURL(file)); // Update state with image preview URL
+      setImageFileExtension(file.name.split(".").pop() || ""); // Get file extension
+      presenter.handleImageFile(file); // Pass file to presenter for processing
+    }
   };
 
   const inputFieldGenerator = () => {
@@ -78,7 +84,7 @@ const Register = (props: Props) => {
             setAlias={setAlias} 
             password={password} 
             setPassword={setPassword} 
-            doEntry={presenter.doRegister} 
+            doEntry={() => presenter.doRegister()} 
         />
         <div className="form-floating mb-3">
           <input
@@ -89,7 +95,7 @@ const Register = (props: Props) => {
             onChange={handleFileChange}
           />
           <label htmlFor="imageFileInput">User Image</label>
-          <img src={presenter.imageUrl} className="img-thumbnail" alt=""></img>
+          <img src={imageUrl} className="img-thumbnail" alt=""></img>
         </div>
       </>
     );
@@ -127,7 +133,7 @@ const Register = (props: Props) => {
       setRememberMe={setRememberMe}
       submitButtonDisabled={checkSubmitButtonStatus}
       isLoading={isLoading}
-      submit={presenter.doRegister}
+      submit={() => presenter.doRegister()}
     />
   );
 };

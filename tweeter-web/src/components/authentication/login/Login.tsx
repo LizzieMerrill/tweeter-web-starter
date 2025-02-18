@@ -35,7 +35,7 @@ const Login = (props: Props) => {
             setAlias={setAlias} 
             password={password} 
             setPassword={setPassword} 
-            doEntry={presenter.doLogin} 
+            doEntry={() => presenter.doLogin()} 
         />
       </>
     );
@@ -71,7 +71,7 @@ const Login = (props: Props) => {
       setRememberMe={setRememberMe}
       submitButtonDisabled={checkSubmitButtonStatus}
       isLoading={isLoading}
-      submit={presenter.doLogin}
+      submit={() => presenter.doLogin()}
     />
   );
 };
