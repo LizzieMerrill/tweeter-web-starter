@@ -10,7 +10,7 @@ import { LoginPresenter, LoginView } from "../../../presenters/LoginPresenter";
 
 interface Props {
   originalUrl?: string;
-  presenterGenerator: (view: LoginView) => LoginPresenter;
+  presenterGenerator: (view: LoginView, originalUrl?: string) => LoginPresenter;
 }
 
 const Login = (props: Props) => {
@@ -27,28 +27,6 @@ const Login = (props: Props) => {
     return !alias || !password;
   };
 
-  const doLogin = async () => {
-    try {
-      setIsLoading(true);
-
-      const [user, authToken] = await presenter.login(alias, password);
-
-      updateUserInfo(user, user, authToken, rememberMe);
-
-      if (!!props.originalUrl) {
-        navigate(props.originalUrl);
-      } else {
-        navigate("/");
-      }
-    } catch (error) {
-      displayErrorMessage(
-        `Failed to log user in because of exception: ${error}`
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const inputFieldGenerator = () => {
     return (
       <>
@@ -57,7 +35,7 @@ const Login = (props: Props) => {
             setAlias={setAlias} 
             password={password} 
             setPassword={setPassword} 
-            doEntry={doLogin} 
+            doEntry={presenter.doLogin} 
         />
       </>
     );
@@ -72,10 +50,16 @@ const Login = (props: Props) => {
   };
 
   const listener: LoginView = {
-    displayErrorMessage: displayErrorMessage
+    displayErrorMessage: displayErrorMessage,
+    updateUserInfo: updateUserInfo,
+    navigate: (path: string) => navigate(path), 
+    getAlias: () => alias,
+    getPassword: () => password,
+    getRememberMe: () => rememberMe,
+    setLoading: (isLoading: boolean) => setIsLoading(isLoading),
   }
   
-  const [presenter] = useState(props.presenterGenerator(listener));
+  const [presenter] = useState(props.presenterGenerator(listener, props.originalUrl));
 
   return (
     <AuthenticationFormLayout
@@ -87,7 +71,7 @@ const Login = (props: Props) => {
       setRememberMe={setRememberMe}
       submitButtonDisabled={checkSubmitButtonStatus}
       isLoading={isLoading}
-      submit={doLogin}
+      submit={presenter.doLogin}
     />
   );
 };

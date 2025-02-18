@@ -17,9 +17,6 @@ const Register = (props: Props) => {
   const [lastName, setLastName] = useState("");
   const [alias, setAlias] = useState("");
   const [password, setPassword] = useState("");
-  // public imageUrl = <string>("");
-  // public imageBytes = <Uint8Array>(new Uint8Array());
-  // public imageFileExtension = <string>("");
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,37 +37,13 @@ const Register = (props: Props) => {
 
   const registerOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key == "Enter" && !checkSubmitButtonStatus()) {
-      doRegister();
+      presenter.doRegister();
     }
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     presenter.handleImageFile(file);
-  };
-
-  const doRegister = async () => {
-    try {
-      setIsLoading(true);
-
-      const [user, authToken] = await presenter.register(
-        firstName,
-        lastName,
-        alias,
-        password,
-        presenter.imageBytes,
-        presenter.imageFileExtension
-      );
-
-      updateUserInfo(user, user, authToken, rememberMe);
-      navigate("/");
-    } catch (error) {
-      displayErrorMessage(
-        `Failed to register user because of exception: ${error}`
-      );
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   const inputFieldGenerator = () => {
@@ -105,7 +78,7 @@ const Register = (props: Props) => {
             setAlias={setAlias} 
             password={password} 
             setPassword={setPassword} 
-            doEntry={doRegister} 
+            doEntry={presenter.doRegister} 
         />
         <div className="form-floating mb-3">
           <input
@@ -131,7 +104,15 @@ const Register = (props: Props) => {
   };
 
   const listener: RegisterView = {
-    displayErrorMessage: displayErrorMessage
+    updateUserInfo: updateUserInfo,
+    navigate: (path: string) => navigate(path), 
+    displayErrorMessage: displayErrorMessage,
+    getFirstName: () => firstName,
+    getLastName: () => lastName,
+    getAlias: () => alias,
+    getPassword: () => password,
+    getRememberMe: () => rememberMe,
+    setLoading: (isLoading: boolean) => setIsLoading(isLoading),
   }
   
   const [presenter] = useState(props.presenterGenerator(listener));
@@ -146,7 +127,7 @@ const Register = (props: Props) => {
       setRememberMe={setRememberMe}
       submitButtonDisabled={checkSubmitButtonStatus}
       isLoading={isLoading}
-      submit={doRegister}
+      submit={presenter.doRegister}
     />
   );
 };
