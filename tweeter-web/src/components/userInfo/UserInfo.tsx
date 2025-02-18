@@ -1,7 +1,6 @@
 import "./UserInfo.css";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { AuthToken, User } from "tweeter-shared";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfoHook from "./UserInfoHook";
 import { UserInfoPresenter, UserInfoView } from "../../presenters/UserInfoPresenter";
