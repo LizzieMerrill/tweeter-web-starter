@@ -1,6 +1,5 @@
 import "./PostStatus.css";
 import { useState } from "react";
-import { Status } from "tweeter-shared";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfoHook from "../userInfo/UserInfoHook";
 import { PostStatusPresenter, PostStatusView } from "../../presenters/PostStatusPresenter";
@@ -19,25 +18,9 @@ const PostStatus = (props: Props) => {
 
   const submitPost = async (event: React.MouseEvent) => {
     event.preventDefault();
-
-    try {
-      setIsLoading(true);
-      displayInfoMessage("Posting status...", 0);
-
-      const status = new Status(post, currentUser!, Date.now());
-
-      await presenter.postStatus(authToken!, status);
-
-      setPost("");
-      displayInfoMessage("Status posted!", 2000);
-    } catch (error) {
-      displayErrorMessage(
-        `Failed to post the status because of exception: ${error}`
-      );
-    } finally {
-      clearLastInfoMessage();
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    await presenter.submitPost(authToken!, post, currentUser!);
+    setIsLoading(false);
   };
 
   const clearPost = (event: React.MouseEvent) => {
@@ -50,7 +33,17 @@ const PostStatus = (props: Props) => {
   };
 
     const listener: PostStatusView = {
-      displayErrorMessage: displayErrorMessage
+      displayErrorMessage: displayErrorMessage,
+      displayInfoMessage: (message: string, duration: number) => {
+        displayInfoMessage(message, duration);
+      },
+      clearLastInfoMessage: () => {
+        clearLastInfoMessage();
+      },
+      onPostSuccess: () => {
+        setPost("");
+        setIsLoading(false);
+      },
     }
     
     const [presenter] = useState(props.presenterGenerator(listener));
