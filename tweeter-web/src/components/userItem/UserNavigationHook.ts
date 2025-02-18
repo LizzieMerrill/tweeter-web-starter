@@ -36,13 +36,19 @@ const useUserNavigationHook = (props: Props) =>{
       //   return value.substring(index);
       // };
 
+      const navigateToUser = async (event: React.MouseEvent): Promise<void> => {
+        await presenter.navigateToUser(event);
+      };
+
           const listener: UserNavigationView = {
             displayErrorMessage: displayErrorMessage,
-            setDisplayedUser: setDisplayedUser
+            setDisplayedUser: setDisplayedUser,
+            authToken: authToken,
+            currentUser: currentUser,
           }
           
           const [presenter] = useState(props.navPresenterGenerator(listener));
 
-    return presenter.navigateToUser;
+    return navigateToUser;
 }
 export default useUserNavigationHook;

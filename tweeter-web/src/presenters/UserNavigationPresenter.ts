@@ -4,6 +4,8 @@ import { UserService } from "../model/UserService";
 export interface UserNavigationView {
     displayErrorMessage: (message: string) => void;
     setDisplayedUser: (user: User) => void;
+    authToken: AuthToken | null;
+    currentUser: User | null;
 }
 export class UserNavigationPresenter {
     private _view: UserNavigationView;
@@ -20,11 +22,10 @@ export class UserNavigationPresenter {
         return this.userService.getUser(authToken, alias);
     };
 
-    public async navigateToUser (
-        event: React.MouseEvent,
-        authToken: AuthToken,
-        currentUser: User | null): Promise<void> {
+    public async navigateToUser (event: React.MouseEvent): Promise<void> {
         event.preventDefault();
+
+        const { authToken, currentUser } = this.view;
     
         try {
           const alias = this.extractAlias(event.target.toString());
