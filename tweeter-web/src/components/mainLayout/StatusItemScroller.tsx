@@ -5,6 +5,7 @@ import useToastListener from "../toaster/ToastListenerHook";
 import StatusItem from "../statusItem/StatusItem";
 import useUserInfoHook from "../userInfo/UserInfoHook";
 import { StatusItemPresenter, StatusItemView } from "../../presenters/StatusItemPresenter";
+import { UserNavigationPresenter, UserNavigationView } from "../../presenters/UserNavigationPresenter";
 
 interface Props {
     presenterGenerator: (view: StatusItemView) => StatusItemPresenter;
@@ -73,7 +74,7 @@ const StatusItemScroller = (props: Props) => {
             key={index}
             className="row mb-3 mx-0 px-0 border rounded bg-white"
           >
-            <StatusItem status={item} />
+            <StatusItem status={item} navPresenterGenerator={(view: UserNavigationView) => new UserNavigationPresenter(view)} />
           </div>
         ))}
       </InfiniteScroll>
