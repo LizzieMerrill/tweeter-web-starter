@@ -1,10 +1,10 @@
-import Login from "../../../../src/components/authentication/login/Login.tsx";
+import Login from "../../../../src/components/authentication/login/Login";
 import {instance, mock, verify} from "@typestrong/ts-mockito";
 import {render, screen} from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import React from "react";
-import { AuthView } from "../../../../src/presenters/AuthPresenter.ts";
-import { LoginPresenter } from "../../../../src/presenters/LoginPresenter.ts";
+import { AuthView } from "../../../../src/presenters/AuthPresenter";
+import { LoginPresenter } from "../../../../src/presenters/LoginPresenter";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { library } from "@fortawesome/fontawesome-svg-core";

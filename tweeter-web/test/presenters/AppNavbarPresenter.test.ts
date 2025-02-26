@@ -1,7 +1,7 @@
 import { AuthToken } from "tweeter-shared";
-import {AppNavbarPresenter, AppNavbarView} from "../../src/presenters/AppNavbarPresenter.ts";
+import {AppNavbarPresenter, AppNavbarView} from "../../src/presenters/AppNavbarPresenter";
 import {anything, instance, mock, spy, verify, when} from "@typestrong/ts-mockito";
-import { UserService } from "../../src/model/UserService.ts";
+import { UserService } from "../../src/model/UserService";
 
 describe("AppNavbarPresenter", () => {
     let mockAppNavbarView: AppNavbarView;
@@ -30,8 +30,8 @@ describe("AppNavbarPresenter", () => {
     });
     it("clears info message and user info on successful logout", async () => {
         await appNavbarPresenter.logOut(authToken);
-        verify(mockAppNavbarView.clearLastInfoMessage).once();
-        verify(mockAppNavbarView.clearUserInfo).once();
+        verify(mockAppNavbarView.clearLastInfoMessage()).once();
+        verify(mockAppNavbarView.clearUserInfo()).once();
         verify(mockAppNavbarView.displayErrorMessage(anything())).never();
         //verify(mockAppNavbarView.navigateToLogin).once(); from demo but not needed
     });
@@ -43,6 +43,6 @@ describe("AppNavbarPresenter", () => {
         verify(mockAppNavbarView.displayErrorMessage("Failed to log user out because of exception: An error occurred")).once();
 
         verify(mockAppNavbarView.clearLastInfoMessage()).never();
-        verify(mockAppNavbarView.clearUserInfo).never();
+        verify(mockAppNavbarView.clearUserInfo()).never();
     });
 });

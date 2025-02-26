@@ -71,7 +71,9 @@ const PostStatus = (props: Props) => {
             id="postStatusButton"
             className="btn btn-md btn-primary me-1"
             type="button"
-            disabled={checkButtonStatus()}
+            aria-label="postStatus"
+            //disabled={checkButtonStatus()}
+            disabled={!post.trim()}
             style={{ width: "8em" }}
             onClick={(event) => submitPost(event)}
           >
@@ -89,7 +91,9 @@ const PostStatus = (props: Props) => {
             id="clearStatusButton"
             className="btn btn-md btn-secondary"
             type="button"
-            disabled={checkButtonStatus()}
+            aria-label="clear"
+            //disabled={checkButtonStatus()}
+            disabled={!post.trim()}
             onClick={(event) => clearPost(event)}
           >
             Clear

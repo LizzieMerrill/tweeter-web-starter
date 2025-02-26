@@ -1,17 +1,31 @@
-import PostStatus from "../../src/components/postStatus/PostStatus.tsx";
+import PostStatus from "../../src/components/postStatus/PostStatus";
 import {instance, mock, verify} from "@typestrong/ts-mockito";
-import { PostStatusPresenter, PostStatusView } from "../../src/presenters/PostStatusPresenter.ts";
-import {render, screen} from "@testing-library/react";
+import { PostStatusPresenter, PostStatusView } from "../../src/presenters/PostStatusPresenter";
+import {render, screen, waitFor} from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { AuthToken, User } from "tweeter-shared";
+import useUserInfo from "../../src/components/userInfo/UserInfoHook";
+
+
+jest.mock("../../src/components/userInfo/UserInfoHook", () => ({
+    ...jest.requireActual("../../src/components/userInfo/UserInfoHook"),
+    __esModule: true,
+    default: jest.fn(),
+  })); 
 
 describe("PostStatus Component", () => {
 
-    const authToken = new AuthToken("abc123", Date.now());
-    const userObj = new User("l", "l", "l", "l");
+    const mockAuthToken = new AuthToken("abc123", Date.now());
+    const mockUser = new User("l", "l", "l", "l");
+    beforeAll(() => {
+        (useUserInfo as jest.Mock).mockReturnValue({
+            currentUser: mockUser,
+            authToken: mockAuthToken,
+          });
+      });
 
     it("When first rendered the Post Status and Clear buttons are both disabled", () => {
         const mockPresenter = mock<PostStatusPresenter>();
@@ -51,8 +65,11 @@ describe("PostStatus Component", () => {
         await user.type(textField, text);
 
         await user.click(postStatusButton);
-        await mockPresenter.submitPost(authToken, text, userObj);//????
-        verify(mockPresenter.submitPost(authToken, text, userObj)).once();
+        await mockPresenter.submitPost(mockAuthToken, text, mockUser);//????
+        //verify(mockPresenter.submitPost(authToken, text, userObj)).once();
+        await waitFor(() => 
+            verify(mockPresenter.submitPost(mockAuthToken, text, mockUser)).once()
+          );
     });
 });
 
@@ -69,8 +86,8 @@ const renderPostStatusAndGetElements = (presenter?: PostStatusPresenter) => {
     const user = userEvent.setup();
     
     renderPostStatus(presenter);
-    const postStatusButton = screen.getByRole("button", {name: /post status/i});
-    const clearButton = screen.getByRole("button", {name: /clear/i});
+    const postStatusButton = screen.getByLabelText("postStatus");
+    const clearButton = screen.getByLabelText("clear");
     const textField = screen.getByLabelText("text");
 
     return {postStatusButton, clearButton, textField, user};
