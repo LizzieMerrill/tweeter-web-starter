@@ -1,4 +1,3 @@
-import { AuthToken, User } from "tweeter-shared";
 import { UserService } from "../model/UserService";
 import { Buffer } from "buffer";
 import { AuthPresenter, AuthView } from "./AuthPresenter";
@@ -13,35 +12,17 @@ export class RegisterPresenter extends AuthPresenter {
       this.userService = new UserService();
     }
 
-    public async register (
-        firstName: string,
-        lastName: string,
-        alias: string,
-        password: string,
-        userImageBytes: Uint8Array,
-        imageFileExtension: string
-    ): Promise<[User, AuthToken]> {
-        return this.userService.register(firstName, lastName, alias, password, userImageBytes, imageFileExtension);
-    };
-
   public async doRegister () {
     await this.doFailureReportingOperation(async () => {
       this.view.setLoading(true);
 
-      const firstName = this.view.getFirstName();
-      const lastName = this.view.getLastName();
-
-      const [user, authToken] = await this.register(
-        firstName,
-        lastName,
-        this.alias,
-        this.password,
+      this.doAuthenticationOperation(
+        (alias, password, firstName?, lastName?, imageBytes?, imageFileExtension?) => 
+            this.userService.register(alias, password, firstName!, lastName!, this.imageBytes, this.imageFileExtension),
+        "",
         this.imageBytes,
         this.imageFileExtension
-      );
-
-      this.view.updateUserInfo(user, user, authToken, this.rememberMe);
-      this.view.navigate(this.doAuthenticationOperation());
+    );
   }, "register user", () => this.view.setLoading(false)); //finally callback
   };
 

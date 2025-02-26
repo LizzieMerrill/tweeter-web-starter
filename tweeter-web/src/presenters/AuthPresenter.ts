@@ -19,11 +19,41 @@ export abstract class AuthPresenter extends Presenter<AuthView>{
     protected constructor(view: AuthView) {
         super(view);
     }
-    protected doAuthenticationOperation(originalUrl?: string) {
-        if (!!originalUrl) {
-            return originalUrl;
+    protected async doAuthenticationOperation(
+        doEntry: (        
+            alias: string,
+            password: string,
+            firstName?: string,
+            lastName?: string,
+            imageBytes?: Uint8Array<ArrayBufferLike>,
+            imageFileExtension?: string
+        ) => Promise<[User, AuthToken]>, 
+        originalUrl?: string, 
+        imageBytes?: Uint8Array<ArrayBufferLike>, 
+        imageFileExtension?: string
+    ) {
+        let user: User, authToken: AuthToken;
+    
+        if (this.view.getFirstName() && this.view.getLastName() && imageBytes && imageFileExtension) {
+            [user, authToken] = await doEntry(
+                this.view.getFirstName(), 
+                this.view.getLastName(), 
+                this.alias, 
+                this.password, 
+                imageBytes, 
+                imageFileExtension
+            );
         } else {
-            return "/";
+            [user, authToken] = await doEntry(this.alias, this.password);
         }
-    };
+    
+        this.view.updateUserInfo(user, user, authToken, this.rememberMe);
+    
+        if (!!originalUrl) {
+            this.view.navigate(originalUrl);
+        } else {
+            this.view.navigate("/");
+        }
+    }    
 }
+
