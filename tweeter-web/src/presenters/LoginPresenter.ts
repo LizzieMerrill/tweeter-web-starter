@@ -14,8 +14,7 @@ export class LoginPresenter extends AuthPresenter{
     await this.doFailureReportingOperation(async () => {
       this.view.setLoading(true);
 
-      this.doAuthenticationOperation((alias, password, firstName?, lastName?, imageBytes?, imageFileExtension?) => 
-        this.userService.login(this.alias, this.password), this.originalUrl);
+      this.doAuthenticationOperation((alias, password, firstName?, lastName?, imageBytes?, imageFileExtension?) => this.userService.login(this.alias, this.password), this.originalUrl);
   }, "log user in", () => this.view.setLoading(false)); //finally callback 
   };
 }
