@@ -10,11 +10,11 @@ export class LoginPresenter extends AuthPresenter{
         this.originalUrl = originalUrl;
     }
 
-  public async doLogin () {
+  public async doLogin (alias: string, password: string, originalUrl?: string) {
     await this.doFailureReportingOperation(async () => {
       this.view.setLoading(true);
 
-      this.doAuthenticationOperation((alias, password, firstName?, lastName?, imageBytes?, imageFileExtension?) => this.userService.login(this.alias, this.password), this.originalUrl);
+      this.doAuthenticationOperation(() => this.userService.login(this.alias, this.password), this.originalUrl);
   }, "log user in", () => this.view.setLoading(false)); //finally callback 
   };
 }

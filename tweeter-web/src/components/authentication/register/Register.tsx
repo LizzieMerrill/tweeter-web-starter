@@ -40,7 +40,7 @@ const Register = (props: Props) => {
 
   const registerOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key == "Enter" && !checkSubmitButtonStatus()) {
-      presenter.doRegister();
+      presenter.doRegister();//TODO add parameters for presenters
     }
   };
 
@@ -85,7 +85,7 @@ const Register = (props: Props) => {
             setAlias={setAlias} 
             password={password} 
             setPassword={setPassword} 
-            doEntry={() => presenter.doRegister()} 
+            doEntry={() => presenter.doRegister()} //TODO add parameters for presenters
         />
         <div className="form-floating mb-3">
           <input
@@ -134,7 +134,7 @@ const Register = (props: Props) => {
       setRememberMe={setRememberMe}
       submitButtonDisabled={checkSubmitButtonStatus}
       isLoading={isLoading}
-      submit={() => presenter.doRegister()}
+      submit={() => presenter.doRegister()}//TODO add parameters for presenters
     />
   );
 };

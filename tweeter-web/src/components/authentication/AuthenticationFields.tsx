@@ -28,6 +28,7 @@ const AuthenticationFields = ({ alias, setAlias, password, setPassword, doEntry 
                     className="form-control"
                     size={50}
                     id="aliasInput"
+                    aria-label="alias"
                     placeholder="name@example.com"
                     onKeyDown={registerOnEnter}
                     onChange={(event) => setAlias(event.target.value)}
@@ -40,6 +41,7 @@ const AuthenticationFields = ({ alias, setAlias, password, setPassword, doEntry 
                     type="password"
                     className="form-control bottom"
                     id="passwordInput"
+                    aria-label="password"
                     placeholder="Password"
                     onKeyDown={registerOnEnter}
                     onChange={(event) => setPassword(event.target.value)}

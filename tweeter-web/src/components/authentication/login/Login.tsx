@@ -12,6 +12,7 @@ import { AuthView } from "../../../presenters/AuthPresenter";
 interface Props {
   originalUrl?: string;
   presenterGenerator: (view: AuthView, originalUrl?: string) => LoginPresenter;
+  presenter?: LoginPresenter;
 }
 
 const Login = (props: Props) => {
@@ -36,7 +37,7 @@ const Login = (props: Props) => {
             setAlias={setAlias} 
             password={password} 
             setPassword={setPassword} 
-            doEntry={() => presenter.doLogin()} 
+            doEntry={() => presenter.doLogin(alias, password, props.originalUrl)} //TODO add parameters for presenters
         />
       </>
     );
@@ -62,7 +63,8 @@ const Login = (props: Props) => {
     getLastName: () => ""//register only
   }
   
-  const [presenter] = useState(props.presenterGenerator(listener, props.originalUrl));
+  //const [presenter] = useState(props.presenterGenerator(listener, props.originalUrl));
+  const [presenter] = useState(props.presenter ?? new LoginPresenter(listener, props.originalUrl));
 
   return (
     <AuthenticationFormLayout
@@ -74,7 +76,7 @@ const Login = (props: Props) => {
       setRememberMe={setRememberMe}
       submitButtonDisabled={checkSubmitButtonStatus}
       isLoading={isLoading}
-      submit={() => presenter.doLogin()}
+      submit={() => presenter.doLogin(alias, password, props.originalUrl)}//TODO add parameters for presenters
     />
   );
 };

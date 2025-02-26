@@ -1,6 +1,6 @@
 import "./AppNavbar.css";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { Navigate, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Image from "react-bootstrap/Image";
 import useToastListener from "../toaster/ToastListenerHook";
 import useUserInfoHook from "../userInfo/UserInfoHook";
@@ -70,7 +70,7 @@ const AppNavbar = (props: Props) => {
             </Nav.Item>
             <Nav.Item>
             {/* onClick={presenter.logOut}  */}
-              <NavLink id="logout" onClick={() => {presenter.logOut().then(() => navigate("/login"))}} to={location.pathname}> 
+              <NavLink id="logout" onClick={() => {presenter.logOut(authToken).then(() => navigate("/login"))}} to={location.pathname}> 
                 Logout
               </NavLink>
             </Nav.Item>

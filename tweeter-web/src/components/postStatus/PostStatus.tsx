@@ -6,6 +6,7 @@ import { PostStatusPresenter, PostStatusView } from "../../presenters/PostStatus
 
 interface Props{
   presenterGenerator: (view: PostStatusView) => PostStatusPresenter;
+  presenter?: PostStatusPresenter;
 }
 
 const PostStatus = (props: Props) => {
@@ -46,7 +47,8 @@ const PostStatus = (props: Props) => {
       },
     }
     
-    const [presenter] = useState(props.presenterGenerator(listener));
+    //const [presenter] = useState(props.presenterGenerator(listener));
+    const [presenter] = useState(props.presenter ?? new PostStatusPresenter(listener));
 
   return (
     <div className={isLoading ? "loading" : ""}>
@@ -55,6 +57,7 @@ const PostStatus = (props: Props) => {
           <textarea
             className="form-control"
             id="postStatusTextArea"
+            aria-label="text"
             rows={10}
             placeholder="What's on your mind?"
             value={post}
