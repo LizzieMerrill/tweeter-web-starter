@@ -22,19 +22,19 @@ const ItemScroller = <T, U>({
   const [changedDisplayedUser, setChangedDisplayedUser] = useState(true);
   const { displayedUser, authToken } = useUserInfoHook();
 
-  // Reset the component whenever the displayed user changes
+  //reset the component whenever the displayed user changes
   useEffect(() => {
     reset();
   }, [displayedUser]);
 
-  // Load initial items whenever the displayed user changes.
+  //load initial items whenever the displayed user changes
   useEffect(() => {
     if (changedDisplayedUser) {
       loadMoreItems();
     }
   }, [changedDisplayedUser]);
 
-  // Append new items as they arrive.
+  //add new items as they arrive
   useEffect(() => {
     if (newItems.length > 0) {
       setItems((prevItems) => [...prevItems, ...newItems]);
