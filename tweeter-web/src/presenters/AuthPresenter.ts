@@ -25,11 +25,11 @@ export abstract class AuthPresenter extends Presenter<AuthView>{
             password: string,
             firstName?: string,
             lastName?: string,
-            imageBytes?: Uint8Array<ArrayBufferLike>,
+            imageBytes?: Uint8Array,
             imageFileExtension?: string
         ) => Promise<[User, AuthToken]>, 
         originalUrl?: string, 
-        imageBytes?: Uint8Array<ArrayBufferLike>, 
+        imageBytes?: Uint8Array, 
         imageFileExtension?: string
     ) {
         let user: User, authToken: AuthToken;
