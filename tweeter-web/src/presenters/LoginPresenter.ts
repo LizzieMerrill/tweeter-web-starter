@@ -1,22 +1,12 @@
 import { AuthToken, User } from "tweeter-shared";
 import { UserService } from "../model/UserService";
+import { AuthPresenter, AuthView } from "./AuthPresenter";
 
-export interface LoginView{
-  displayErrorMessage: (message: string) => void;
-  updateUserInfo: (user: User, authUser: User, token: AuthToken, rememberMe: boolean) => void;
-  navigate: (path: string) => void;
-  getAlias: () => string;
-  getPassword: () => string;
-  getRememberMe: () => boolean;
-  setLoading: (isLoading: boolean) => void;
-}
-
-export class LoginPresenter {
+export class LoginPresenter extends AuthPresenter{
     private userService: UserService;
-    private view: LoginView;
-    private originalUrl?: string; // Store originalUrl here
-    public constructor(view: LoginView, originalUrl?: string) {
-        this.view = view;
+    private originalUrl?: string;
+    public constructor(view: AuthView, originalUrl?: string) {
+        super(view);
         this.userService = new UserService();
         this.originalUrl = originalUrl;
     }
@@ -29,28 +19,13 @@ export class LoginPresenter {
   };
 
   public async doLogin () {
-    try {
+    await this.doFailureReportingOperation(async () => {
       this.view.setLoading(true);
 
-      const alias = this.view.getAlias();
-      const password = this.view.getPassword();
-      const rememberMe = this.view.getRememberMe();
+      const [user, authToken] = await this.login(this.alias, this.password);
 
-      const [user, authToken] = await this.login(alias, password);
-
-      this.view.updateUserInfo(user, user, authToken, rememberMe);
-
-      if (!!this.originalUrl) {
-        this.view.navigate(this.originalUrl);
-      } else {
-        this.view.navigate("/");
-      }
-    } catch (error) {
-      this.view.displayErrorMessage(
-        `Failed to log user in because of exception: ${error}`
-      );
-    } finally {
-      this.view.setLoading(false);
-    }
+      this.view.updateUserInfo(user, user, authToken, this.rememberMe);
+      this.view.navigate(this.doAuthenticationOperation(this.originalUrl));
+  }, "log user in", () => this.view.setLoading(false)); //finally callback
   };
 }

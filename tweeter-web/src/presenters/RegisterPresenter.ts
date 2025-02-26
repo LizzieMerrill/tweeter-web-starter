@@ -1,29 +1,16 @@
 import { AuthToken, User } from "tweeter-shared";
 import { UserService } from "../model/UserService";
 import { Buffer } from "buffer";
+import { AuthPresenter, AuthView } from "./AuthPresenter";
 
-export interface RegisterView{
-    displayErrorMessage: (message: string) => void;
-    updateUserInfo: (user: User, authUser: User, token: AuthToken, rememberMe: boolean) => void;
-    navigate: (path: string) => void;
-    getFirstName: () => string;
-    getLastName: () => string;
-    getAlias: () => string;
-    getPassword: () => string;
-    getRememberMe: () => boolean;
-    setLoading: (isLoading: boolean) => void;
-}
-
-//export class RegisterPresenter extends AuthPresenter {
-export class RegisterPresenter {
+export class RegisterPresenter extends AuthPresenter {
     private userService: UserService;
     public imageUrl = <string>("");
     public imageBytes = <Uint8Array>(new Uint8Array());
     public imageFileExtension = <string>("");
-    private view: RegisterView;
-    public constructor(view: RegisterView) {
-        this.userService = new UserService();
-        this.view = view;
+    public constructor(view: AuthView) {
+      super(view);  
+      this.userService = new UserService();
     }
 
     public async register (
@@ -38,33 +25,24 @@ export class RegisterPresenter {
     };
 
   public async doRegister () {
-    try {
+    await this.doFailureReportingOperation(async () => {
       this.view.setLoading(true);
 
       const firstName = this.view.getFirstName();
       const lastName = this.view.getLastName();
-      const alias = this.view.getAlias();
-      const password = this.view.getPassword();
-      const rememberMe = this.view.getRememberMe();
 
       const [user, authToken] = await this.register(
         firstName,
         lastName,
-        alias,
-        password,
+        this.alias,
+        this.password,
         this.imageBytes,
         this.imageFileExtension
       );
 
-      this.view.updateUserInfo(user, user, authToken, rememberMe);
-      this.view.navigate("/");
-    } catch (error) {
-      this.view.displayErrorMessage(
-        `Failed to register user because of exception: ${error}`
-      );
-    } finally {
-      this.view.setLoading(false);
-    }
+      this.view.updateUserInfo(user, user, authToken, this.rememberMe);
+      this.view.navigate(this.doAuthenticationOperation());
+  }, "register user", () => this.view.setLoading(false)); //finally callback
   };
 
   public handleImageFile (file: File | undefined) {
@@ -75,7 +53,7 @@ export class RegisterPresenter {
       reader.onload = (event: ProgressEvent<FileReader>) => {
         const imageStringBase64 = event.target?.result as string;
 
-        // Remove unnecessary file metadata from the start of the string.
+        //remove unnecessary file metadata from the start of the string
         const imageStringBase64BufferContents =
           imageStringBase64.split("base64,")[1];
 
@@ -88,7 +66,7 @@ export class RegisterPresenter {
       };
       reader.readAsDataURL(file);
 
-      // Set image file extension (and move to a separate method)
+      //set image file extension (and move to a separate method)
       const fileExtension = this.getFileExtension(file);
       if (fileExtension) {
         this.imageFileExtension = fileExtension;

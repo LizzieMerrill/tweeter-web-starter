@@ -1,7 +1,5 @@
 import { User } from "tweeter-shared";
 import { Link } from "react-router-dom";
-import useToastListener from "../toaster/ToastListenerHook";
-import useUserInfoHook from "../userInfo/UserInfoHook";
 import useUserNavigationHook from "./UserNavigationHook";
 import { UserNavigationPresenter, UserNavigationView } from "../../presenters/UserNavigationPresenter";
 
@@ -11,10 +9,6 @@ interface Props {
 }
 
 const UserItem = (props: Props) => {
-  const { displayErrorMessage } = useToastListener();
-  const { setDisplayedUser, currentUser, authToken } =
-    useUserInfoHook();
-
     const navigateToUser = useUserNavigationHook(props);
 
   return (
