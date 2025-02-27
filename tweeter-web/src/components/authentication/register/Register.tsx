@@ -10,7 +10,6 @@ import { RegisterPresenter } from "../../../presenters/RegisterPresenter";
 import { AuthView } from "../../../presenters/AuthPresenter";
 
 interface Props{
-  presenterGenerator: (view: AuthView) => RegisterPresenter;
   presenter?: RegisterPresenter;
 }
 

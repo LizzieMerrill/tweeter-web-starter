@@ -7,7 +7,7 @@ import { UserNavigationPresenter, UserNavigationView } from "../../presenters/Us
 
 interface Props<T, U> {
   presenterGenerator: (view: PagedItemView<T>) => PagedItemPresenter<T, U>;
-  navPresenterGenerator: (view: UserNavigationView) => UserNavigationPresenter;
+  navPresenterGenerator: (view: UserNavigationView) => UserNavigationPresenter;//TODO remove all nav presenter generators
   itemComponentGenerator: (item: T, navPresenterGenerator: (view: UserNavigationView) => UserNavigationPresenter) => JSX.Element;
 }
 
