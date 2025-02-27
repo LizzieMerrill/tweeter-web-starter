@@ -68,9 +68,8 @@ describe("PostStatus Component", () => {
         await user.type(textField, text);
 
         await user.click(postStatusButton);
-        await mockPresenter.submitPost(mockAuthToken, text, mockUser);//????
         await waitFor(() => 
-            verify(mockPresenter.submitPost(mockAuthToken, text, mockUser)).once()
+            verify(mockPresenter.submitPost(mockAuthTokenInstance, text, mockUserInstance)).once()
           );
     });
 });
