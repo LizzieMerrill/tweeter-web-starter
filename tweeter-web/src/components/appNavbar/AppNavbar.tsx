@@ -9,7 +9,7 @@ import { useState } from "react";
 
 
 interface Props {
-  presenterGenerator: (view: AppNavbarView) => AppNavbarPresenter;
+  presenter?: AppNavbarPresenter;
 }
 
 const AppNavbar = (props: Props) => {
@@ -28,7 +28,7 @@ const AppNavbar = (props: Props) => {
     };
     
       
-      const [presenter] = useState(props.presenterGenerator(listener));
+  const [presenter] = useState(props.presenter ?? new AppNavbarPresenter(listener));
 
   return (
     <Navbar

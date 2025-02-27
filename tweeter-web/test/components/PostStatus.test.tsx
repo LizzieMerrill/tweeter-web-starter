@@ -1,6 +1,6 @@
 import PostStatus from "../../src/components/postStatus/PostStatus";
 import {instance, mock, verify} from "@typestrong/ts-mockito";
-import { PostStatusPresenter, PostStatusView } from "../../src/presenters/PostStatusPresenter";
+import { PostStatusPresenter } from "../../src/presenters/PostStatusPresenter";
 import {render, screen, waitFor} from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import React from "react";
@@ -18,12 +18,15 @@ jest.mock("../../src/components/userInfo/UserInfoHook", () => ({
 
 describe("PostStatus Component", () => {
 
-    const mockAuthToken = new AuthToken("abc123", Date.now());
-    const mockUser = new User("l", "l", "l", "l");
+    const mockAuthToken = mock<AuthToken>();
+    const mockUser = mock<User>();
+    const mockAuthTokenInstance = instance(mockAuthToken);
+    const mockUserInstance = instance(mockUser);
+
     beforeAll(() => {
         (useUserInfo as jest.Mock).mockReturnValue({
-            currentUser: mockUser,
-            authToken: mockAuthToken,
+            currentUser: mockUserInstance,
+            authToken: mockAuthTokenInstance,
           });
       });
 
@@ -59,14 +62,13 @@ describe("PostStatus Component", () => {
         const mockPresenter = mock<PostStatusPresenter>();
         const mockPresenterInstance = instance(mockPresenter);
         
-        const {postStatusButton, clearButton, user, textField} = renderPostStatusAndGetElements(mockPresenterInstance);
+        const {postStatusButton, user, textField} = renderPostStatusAndGetElements(mockPresenterInstance);
         const text = "lolz";
 
         await user.type(textField, text);
 
         await user.click(postStatusButton);
         await mockPresenter.submitPost(mockAuthToken, text, mockUser);//????
-        //verify(mockPresenter.submitPost(authToken, text, userObj)).once();
         await waitFor(() => 
             verify(mockPresenter.submitPost(mockAuthToken, text, mockUser)).once()
           );
@@ -76,9 +78,7 @@ describe("PostStatus Component", () => {
 const renderPostStatus = ( presenter?: PostStatusPresenter) => {
         return render(
         <MemoryRouter>
-            {!!presenter ? (<PostStatus presenter={presenter} presenterGenerator={function (view: PostStatusView): PostStatusPresenter {
-                            throw new Error("PresenterGenerator not needed for tests?")}}/>) : (<PostStatus presenterGenerator={function (view: PostStatusView): PostStatusPresenter {
-                                            throw new Error("PresenterGenerator not needed for tests?")}}/>)}
+            {!!presenter ? (<PostStatus presenter={presenter}/>) : (<PostStatus/>)}
         </MemoryRouter>);
 }
 

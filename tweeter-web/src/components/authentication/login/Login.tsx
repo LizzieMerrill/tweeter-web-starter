@@ -11,7 +11,6 @@ import { AuthView } from "../../../presenters/AuthPresenter";
 
 interface Props {
   originalUrl?: string;
-  presenterGenerator: (view: AuthView, originalUrl?: string) => LoginPresenter;
   presenter?: LoginPresenter;
 }
 
@@ -63,7 +62,6 @@ const Login = (props: Props) => {
     getLastName: () => ""//register only
   }
   
-  //const [presenter] = useState(props.presenterGenerator(listener, props.originalUrl));
   const [presenter] = useState(props.presenter ?? new LoginPresenter(listener, props.originalUrl));
 
   return (

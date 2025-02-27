@@ -29,10 +29,12 @@ describe("PostStatusPresenter", () => {
         await postStatusPresenter.submitPost(authToken, "my epic post", user);
         verify(mockPostStatusView.displayInfoMessage("Posting status...", 0)).once();//counter-test with never()
     });
+    
     it("calls service poststatus with proper string and authtoken", async () => {
         await postStatusPresenter.submitPost(authToken, "my epic post", user);
         verify(mockStatusService.postStatus(authToken, deepEqual(status))).once();//counter test with anything() in place of authtoken
     });
+
     it("clears info message, clear post and displays status posted message on successful postStatus", async () => {
         await postStatusPresenter.submitPost(authToken, "my epic post", user);
         verify(mockPostStatusView.clearLastInfoMessage()).once();
@@ -41,6 +43,7 @@ describe("PostStatusPresenter", () => {
 
         verify(mockPostStatusView.displayErrorMessage(anything())).never();
     });
+
     it("error message when poststatus fails, clear last info message but nothing else", async () => {
         const error = new Error("An error occurred");
         when(mockStatusService.postStatus(authToken, deepEqual(status))).thenThrow(error);

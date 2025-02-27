@@ -1,5 +1,4 @@
 import "bootstrap/dist/css/bootstrap.css";
-import { AuthPresenter, AuthView } from "../../presenters/AuthPresenter";
 
 interface Props {
     alias: string;

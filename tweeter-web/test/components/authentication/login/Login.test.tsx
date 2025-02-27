@@ -3,7 +3,6 @@ import {instance, mock, verify} from "@typestrong/ts-mockito";
 import {render, screen} from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import React from "react";
-import { AuthView } from "../../../../src/presenters/AuthPresenter";
 import { LoginPresenter } from "../../../../src/presenters/LoginPresenter";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
@@ -64,11 +63,8 @@ describe("Login Component", () => {
 const renderLogin = ( originalUrl?: string, presenter?: LoginPresenter) => {
     return render(
     <MemoryRouter>
-        {!!presenter ? (<Login originalUrl={originalUrl} presenter={presenter} presenterGenerator={function (view: AuthView, originalUrl?: string): LoginPresenter {
-                throw new Error("PresenterGenerator not needed for tests?");
-            } }/>) : (<Login originalUrl={originalUrl} presenterGenerator={function (view: AuthView, originalUrl?: string): LoginPresenter {
-                throw new Error("PresenterGenerator not needed for tests?");
-            } }/>)}
+        {!!presenter ? (<Login originalUrl={originalUrl} presenter={presenter}/>) : 
+            (<Login originalUrl={originalUrl}/>)}
     </MemoryRouter>);
 }
 

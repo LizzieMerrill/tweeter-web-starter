@@ -6,7 +6,7 @@ import useUserInfoHook from "./UserInfoHook";
 import { UserInfoPresenter, UserInfoView } from "../../presenters/UserInfoPresenter";
 
 interface Props{
-  presenterGenerator: (view: UserInfoView) => UserInfoPresenter;
+  presenter?: UserInfoPresenter;
 }
 
 const UserInfo = (props: Props) => {
@@ -47,8 +47,7 @@ const UserInfo = (props: Props) => {
     setIsLoading: setIsLoading
   };
   
-    
-    const [presenter] = useState(props.presenterGenerator(listener));
+    const [presenter] = useState(props.presenter ?? new UserInfoPresenter(listener));
 
   return (
     <div className={isLoading ? "loading" : ""}>

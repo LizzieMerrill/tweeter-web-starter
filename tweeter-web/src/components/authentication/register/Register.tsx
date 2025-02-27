@@ -11,6 +11,7 @@ import { AuthView } from "../../../presenters/AuthPresenter";
 
 interface Props{
   presenterGenerator: (view: AuthView) => RegisterPresenter;
+  presenter?: RegisterPresenter;
 }
 
 const Register = (props: Props) => {
@@ -122,7 +123,8 @@ const Register = (props: Props) => {
     setLoading: (isLoading: boolean) => setIsLoading(isLoading),
   }
   
-  const [presenter] = useState(props.presenterGenerator(listener));
+  //const [presenter] = useState(props.presenterGenerator(listener));
+  const [presenter] = useState(props.presenter ?? new RegisterPresenter(listener));
 
   return (
     <AuthenticationFormLayout
