@@ -1,3 +1,5 @@
-export const handler = async (request) => {
+import { GetFollowCountsRequest } from "tweeter-shared";
+
+export const handler = async (request: GetFollowCountsRequest) => {
     
 }

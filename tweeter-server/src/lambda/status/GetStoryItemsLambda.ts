@@ -1,3 +1,5 @@
-export const handler = async (request) => {
+import { PagedStatusItemRequest } from "tweeter-shared";
+
+export const handler = async (request: PagedStatusItemRequest) => {
     
 }
