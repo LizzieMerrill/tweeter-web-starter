@@ -1,5 +1,5 @@
-import { PagedStatusItemRequest } from "tweeter-shared";
+import { PagedStatusItemRequest, PagedStatusItemResponse } from "tweeter-shared";
 
-export const handler = async (request: PagedStatusItemRequest) => {
+export const handler = async (request: PagedStatusItemRequest): Promise<PagedStatusItemResponse> => {
     
 }

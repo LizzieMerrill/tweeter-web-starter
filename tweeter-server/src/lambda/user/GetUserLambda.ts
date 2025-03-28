@@ -1,5 +1,5 @@
-import { GetUserRequest } from "tweeter-shared";
+import { GetUserRequest, GetUserResponse } from "tweeter-shared";
 
-export const handler = async (request: GetUserRequest) => {
+export const handler = async (request: GetUserRequest): Promise<GetUserResponse> => {
     
 }

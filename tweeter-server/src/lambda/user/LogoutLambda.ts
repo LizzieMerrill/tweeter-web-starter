@@ -1,5 +1,5 @@
-import { LogoutRequest } from "tweeter-shared";
+import { LogoutRequest, TweeterResponse } from "tweeter-shared";
 
-export const handler = async (request: LogoutRequest) => {
+export const handler = async (request: LogoutRequest): Promise<TweeterResponse> => {
     
 }

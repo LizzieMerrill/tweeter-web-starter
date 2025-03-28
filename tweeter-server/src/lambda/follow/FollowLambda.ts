@@ -1,5 +1,5 @@
-import { ToggleFollowingRequest } from "tweeter-shared";
+import { ToggleFollowingRequest, TweeterResponse } from "tweeter-shared";
 
-export const handler = async (request: ToggleFollowingRequest) => {
+export const handler = async (request: ToggleFollowingRequest): Promise<TweeterResponse> => {
     
 }

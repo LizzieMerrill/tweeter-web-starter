@@ -1,5 +1,5 @@
-import { PostStatusRequest } from "tweeter-shared";
+import { PostStatusRequest, TweeterResponse } from "tweeter-shared";
 
-export const handler = async (request: PostStatusRequest) => {
+export const handler = async (request: PostStatusRequest): Promise<TweeterResponse> => {
     
 }

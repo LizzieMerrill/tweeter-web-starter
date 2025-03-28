@@ -25,3 +25,11 @@ export type { PagedUserItemRequest } from "./model/net/request/PagedUserItemRequ
 export type { PostStatusRequest } from "./model/net/request/PostStatusRequest";
 export type { RegisterRequest } from "./model/net/request/RegisterRequest";
 export type { ToggleFollowingRequest } from "./model/net/request/ToggleFollowingRequest";
+
+//export responses
+export type { TweeterResponse } from "./model/net/response/TweeterResponse";
+export type { PagedUserItemResponse } from "./model/net/response/PagedUserItemResponse";
+export type { PagedStatusItemResponse } from "./model/net/response/PagedStatusItemResponse";
+export type { GetUserResponse } from "./model/net/response/GetUserResponse";
+export type { GetFollowCountsResponse } from "./model/net/response/GetFollowCountsResponse";
+export type { CheckIfFollowerResponse } from "./model/net/response/CheckIfFollowerResponse";

@@ -1,5 +1,5 @@
-import { GetFollowCountsRequest } from "tweeter-shared";
+import { GetFollowCountsRequest, GetFollowCountsResponse } from "tweeter-shared";
 
-export const handler = async (request: GetFollowCountsRequest) => {
+export const handler = async (request: GetFollowCountsRequest): Promise<GetFollowCountsResponse> => {
     
 }
