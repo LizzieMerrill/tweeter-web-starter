@@ -1,5 +1,5 @@
 import { Buffer } from "buffer";
-import { AuthToken, FakeData, User } from "tweeter-shared";
+import { AuthToken, FakeData, User, UserDto } from "tweeter-shared";
 
 export class UserService {
   
@@ -7,14 +7,14 @@ export class UserService {
   public async login(
     alias: string,
     password: string
-  ): Promise<[User, AuthToken]>{
+  ): Promise<[UserDto, AuthToken]>{
     const user = FakeData.instance.firstUser;
     
     if (user === null) {
       throw new Error("Invalid alias or password");
     }
     
-    return [user, FakeData.instance.authToken];
+    return [this.createDto(user)!, FakeData.instance.authToken];
   };
 
   //logout
@@ -31,7 +31,7 @@ export class UserService {
       password: string,
       userImageBytes: Uint8Array,
       imageFileExtension: string
-    ): Promise<[User, AuthToken]> {
+    ): Promise<[UserDto, AuthToken]> {
       // Not neded now, but will be needed when you make the request to the server in milestone 3
       const imageStringBase64: string =
         Buffer.from(userImageBytes).toString("base64");
@@ -43,53 +43,52 @@ export class UserService {
         throw new Error("Invalid registration");
       }
   
-      return [user, FakeData.instance.authToken];
+      return [this.createDto(user)!, FakeData.instance.authToken];
     };
 
     //getuser for usernavigationhook
     public async getUser (
-      authToken: AuthToken,
+      token: string,
       alias: string
-    ): Promise<User | null> {
+    ): Promise<UserDto | null> {
       // TODO: Replace with the result of calling server
-      return FakeData.instance.findUserByAlias(alias);
+      const user = (FakeData.instance.findUserByAlias(alias));
+      return this.createDto(user) == null ? null : this.createDto(user);
     };
 
     //follow
     public async follow (
-      authToken: AuthToken,
-      userToFollow: User
+      token: string,
+      userToFollow: UserDto
     ): Promise<[followerCount: number, followeeCount: number]> {
       // Pause so we can see the follow message. Remove when connected to the server
-      await new Promise((f) => setTimeout(f, 2000));
-  
-      // TODO: Call the server
-      const followerCount = await this.getFollowerCount(authToken, userToFollow);
-      const followeeCount = await this.getFolloweeCount(authToken, userToFollow);
-  
-      return [followerCount, followeeCount];
+      return await this.getCounts(token, userToFollow);
     };
 
     //unfollow
     public async unfollow (
-      authToken: AuthToken,
-      userToUnfollow: User
+      token: string,
+      userToUnfollow: UserDto
     ): Promise<[followerCount: number, followeeCount: number]> {
       // Pause so we can see the unfollow message. Remove when connected to the server
-      await new Promise((f) => setTimeout(f, 2000));
-  
-      // TODO: Call the server
-      const followerCount = await this.getFollowerCount(authToken, userToUnfollow);
-      const followeeCount = await this.getFolloweeCount(authToken, userToUnfollow);
-  
-      return [followerCount, followeeCount];
+      return await this.getCounts(token, userToUnfollow);
     };
+
+  private async getCounts(token: string, userToUnfollow: UserDto): Promise<[followerCount: number, followeeCount: number]> {
+    await new Promise((f) => setTimeout(f, 2000));
+
+    // TODO: Call the server
+    const followerCount = await this.getFollowerCount(token, userToUnfollow);
+    const followeeCount = await this.getFolloweeCount(token, userToUnfollow);
+
+    return [followerCount, followeeCount];
+  }
 
   //user info
   public async getIsFollowerStatus (
-    authToken: AuthToken,
-    user: User,
-    selectedUser: User
+    token: string,
+    user: UserDto,
+    selectedUser: UserDto
   ): Promise<boolean> {
     // TODO: Replace with the result of calling server
     return FakeData.instance.isFollower();
@@ -97,8 +96,8 @@ export class UserService {
 
   //more user info
   public async getFolloweeCount (
-    authToken: AuthToken,
-    user: User
+    token: string,
+    user: UserDto
   ): Promise<number> {
     // TODO: Replace with the result of calling server
     return FakeData.instance.getFolloweeCount(user.alias);
@@ -106,10 +105,26 @@ export class UserService {
 
   //oh look, even more user info
   public async getFollowerCount (
-    authToken: AuthToken,
-    user: User
+    token: string,
+    user: UserDto
   ): Promise<number> {
     // TODO: Replace with the result of calling server
     return FakeData.instance.getFollowerCount(user.alias);
   };
+
+
+
+
+      private createDto(user: User | null): UserDto | null{
+        return user == null ? null :{
+          firstName: user.firstName,
+          lastName: user.lastName,
+          alias: user.alias,
+          imageUrl: user.imageUrl
+        }
+      }
+
+      private getDomainObject(dto: UserDto | null): User | null{
+        return dto == null ? null : new User(dto.firstName, dto.lastName, dto.alias, dto.imageUrl);
+      }
 }
