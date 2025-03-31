@@ -4,5 +4,5 @@ import { UserDto } from "../../dto/UserDto";
 
 export interface GetFollowCountsRequest{
     readonly token: string,
-    readonly user: UserDto | null
+    readonly user: UserDto
 }

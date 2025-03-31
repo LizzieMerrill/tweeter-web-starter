@@ -14,11 +14,11 @@ export class UserService {
       throw new Error("Invalid alias or password");
     }
     
-    return [this.createDto(user)!, FakeData.instance.authToken];
+    return [user.dto!, FakeData.instance.authToken];
   };
 
   //logout
-  public async logout (authToken: AuthToken): Promise<void> {
+  public async logout (token: string): Promise<void> {
     // Pause so we can see the logging out message. Delete when the call to the server is implemented.
     await new Promise((res) => setTimeout(res, 1000));
   };
@@ -43,7 +43,7 @@ export class UserService {
         throw new Error("Invalid registration");
       }
   
-      return [this.createDto(user)!, FakeData.instance.authToken];
+      return [user.dto!, FakeData.instance.authToken];
     };
 
     //getuser for usernavigationhook
@@ -53,7 +53,7 @@ export class UserService {
     ): Promise<UserDto | null> {
       // TODO: Replace with the result of calling server
       const user = (FakeData.instance.findUserByAlias(alias));
-      return this.createDto(user) == null ? null : this.createDto(user);
+      return user!.dto == null ? null : user!.dto;
     };
 
     //follow
@@ -87,8 +87,8 @@ export class UserService {
   //user info
   public async getIsFollowerStatus (
     token: string,
-    user: UserDto,
-    selectedUser: UserDto
+    user: UserDto | null,
+    selectedUser: UserDto | null
   ): Promise<boolean> {
     // TODO: Replace with the result of calling server
     return FakeData.instance.isFollower();
@@ -111,20 +111,4 @@ export class UserService {
     // TODO: Replace with the result of calling server
     return FakeData.instance.getFollowerCount(user.alias);
   };
-
-
-
-
-      private createDto(user: User | null): UserDto | null{
-        return user == null ? null :{
-          firstName: user.firstName,
-          lastName: user.lastName,
-          alias: user.alias,
-          imageUrl: user.imageUrl
-        }
-      }
-
-      private getDomainObject(dto: UserDto | null): User | null{
-        return dto == null ? null : new User(dto.firstName, dto.lastName, dto.alias, dto.imageUrl);
-      }
 }

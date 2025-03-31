@@ -4,5 +4,5 @@ import { UserDto } from "../../dto/UserDto";
 
 export interface ToggleFollowingRequest{
     readonly token: string,
-    readonly userToFollowOrUnfollow: UserDto | null
+    readonly userToFollowOrUnfollow: UserDto
 }

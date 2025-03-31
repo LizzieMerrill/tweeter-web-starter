@@ -13,8 +13,8 @@ export class StatusService {
       };
   
   private async getFakeData(lastItem: StatusDto | null, pageSize: number): Promise<[StatusDto[], boolean]> {
-    const [items, hasMore] = FakeData.instance.getPageOfStatuses(this.getDomainObject(lastItem), pageSize);
-    const dtos = items.map((status) => this.createDto(status));
+    const [items, hasMore] = FakeData.instance.getPageOfStatuses(Status.fromDto(lastItem), pageSize);
+    const dtos = items.map((status) => status.dto);
     return [dtos, hasMore];
   }
 
@@ -38,17 +38,4 @@ export class StatusService {
     
         // TODO: Call the server to post the status
       };
-
-      private createDto(status: Status): StatusDto{
-        return{
-          post: status.post,
-          user: status.user,
-          timestamp: status.timestamp,
-          segments: status.segments
-        }
-      }
-
-      private getDomainObject(dto: StatusDto | null): Status | null{
-        return dto == null ? null : new Status(dto.post, dto.user, dto.timestamp);
-      }
 }
