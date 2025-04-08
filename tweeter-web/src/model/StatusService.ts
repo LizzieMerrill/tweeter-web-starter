@@ -33,3 +33,5 @@ export class StatusService {
         // TODO: Call the server to post the status
       };
 }
+
+export default StatusService;
