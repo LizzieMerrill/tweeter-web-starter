@@ -1,6 +1,6 @@
 import "isomorphic-fetch";
 import { User } from "tweeter-shared";
-import { ServerFacade } from "../../../network/ServerFacade";
+import { ServerFacade } from "../../network/ServerFacade";
 import { GetFollowCountsRequest, GetFollowCountsResponse } from "tweeter-shared";
 
 describe("ServerFacade Integration Test - GetFollowerCount", () => {
