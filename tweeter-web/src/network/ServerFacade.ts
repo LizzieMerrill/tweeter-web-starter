@@ -16,8 +16,7 @@ import {
     Status,
     ToggleFollowingRequest,
     TweeterResponse,
-    User,
-    UserDto,
+    User
   } from "tweeter-shared";
   import { ClientCommunicator } from "./ClientCommunicator";
   
