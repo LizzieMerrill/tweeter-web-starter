@@ -213,7 +213,7 @@ import {
       //checkIfFollowing
       public async checkIfFollowing(
         request: CheckIfFollowerRequest
-      ): Promise<boolean | null> {
+      ): Promise<boolean> {
         const response = await this.clientCommunicator.doPost<
           CheckIfFollowerRequest,
           CheckIfFollowerResponse
@@ -275,7 +275,7 @@ import {
       //getFolloweeCount
       public async getFolloweeCount(
         request: GetFollowCountsRequest
-      ): Promise<number | null> {
+      ): Promise<number> {
         const response = await this.clientCommunicator.doPost<
           GetFollowCountsRequest,
           GetFollowCountsResponse
@@ -295,7 +295,7 @@ import {
       //getFollowerCount
       public async getFollowerCount(
         request: GetFollowCountsRequest
-      ): Promise<number | null> {
+      ): Promise<number> {
         const response = await this.clientCommunicator.doPost<
           GetFollowCountsRequest,
           GetFollowCountsResponse
@@ -314,7 +314,7 @@ import {
       //getUser
       public async getUser(
         request: GetUserRequest
-      ): Promise<User | null> {
+      ): Promise<User> {
         const response = await this.clientCommunicator.doPost<
           GetUserRequest,
           GetUserResponse
@@ -322,8 +322,10 @@ import {
 
 
       // Convert the UserDto returned by ClientCommunicator to a User
-      const userObj = response.success && response.user
-          ? User.fromDto(response.user) as User : null;
+      // const userObj = response.success && response.user
+      //     ? User.fromDto(response.user) as User : null;
+
+            const userObj = User.fromDto(response.user) as User;
         
         // Handle errors    
         if (response.success) {
@@ -352,4 +354,3 @@ import {
         }
       }
   }
-  export default ServerFacade;

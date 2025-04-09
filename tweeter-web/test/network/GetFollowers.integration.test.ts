@@ -1,5 +1,5 @@
 import "isomorphic-fetch";
-import { ServerFacade } from "../../network/ServerFacade";
+import { ServerFacade } from "../../src/network/ServerFacade";
 import { PagedUserItemRequest, PagedUserItemResponse } from "tweeter-shared";
 
 describe("ServerFacade Integration Test - GetFollowers", () => {
