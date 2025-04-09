@@ -1,5 +1,5 @@
 import { Buffer } from "buffer";
-import { AuthToken, FakeData, User, UserDto } from "tweeter-shared";
+import { AuthToken, FakeData, UserDto } from "tweeter-shared";
 
 export class UserService {
   
