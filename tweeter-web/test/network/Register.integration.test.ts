@@ -20,7 +20,7 @@ describe("ServerFacade Integration Test - Register", () => {
     };
 
     //dummy successful response returned by the server
-    const dummySuccessResponse: TweeterResponse = { success: true, message: null };
+    const dummySuccessResponse: TweeterResponse = { success: true, message: undefined };
 
     //temporarily override clientCommunicator.doPost to simulate a server response
     const originalDoPost = (serverFacade as any).clientCommunicator.doPost;

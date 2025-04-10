@@ -6,6 +6,6 @@ export const handler = async (request: LogoutRequest): Promise<TweeterResponse> 
     await userService.logout(request.token);
     return {
         success: true,
-        message: null
+        message: undefined
     }
 }

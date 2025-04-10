@@ -7,7 +7,7 @@ export const handler = async (request: PagedStatusItemRequest): Promise<PagedSta
 
     return{
         success: true,
-        message: null,
+        message: undefined,
         items: items,
         hasMore: hasMore
     }

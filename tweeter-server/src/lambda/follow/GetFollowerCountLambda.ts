@@ -6,7 +6,7 @@ export const handler = async (request: GetFollowCountsRequest): Promise<GetFollo
     const count = await userService.getFollowerCount(request.token, request.user);
     return {
         success: true,
-        message: null,
+        message: undefined,
         count: count
     }
 }

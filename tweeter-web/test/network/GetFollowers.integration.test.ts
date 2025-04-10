@@ -27,7 +27,7 @@ describe("ServerFacade Integration Test - GetFollowers", () => {
 
     const dummyResponse: PagedUserItemResponse = {
       success: true,
-      message: null,
+      message: undefined,
       items: [dummyUserDto],
       hasMore: false,
     };

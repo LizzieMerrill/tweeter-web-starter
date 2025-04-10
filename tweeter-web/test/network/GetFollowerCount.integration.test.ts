@@ -22,7 +22,7 @@ describe("ServerFacade Integration Test - GetFollowerCount", () => {
     //dummy response to simulate a successful follower count retrieval
     const dummyResponse: GetFollowCountsResponse = {
       success: true,
-      message: null,
+      message: undefined,
       count: 5,
     };
 

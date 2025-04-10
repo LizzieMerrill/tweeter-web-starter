@@ -54,7 +54,7 @@ import {
         }
       } else {
         console.error(response);
-        throw new Error(response.message!);
+        throw new Error(response.message);
       }
     }
 
@@ -84,7 +84,7 @@ import {
         }
       } else {
         console.error(response);
-        throw new Error(response.message!);
+        throw new Error(response.message);
       }
     }
 
@@ -114,7 +114,7 @@ import {
         }
       } else {
         console.error(response);
-        throw new Error(response.message!);
+        throw new Error(response.message);
       }
     }
 
@@ -144,7 +144,7 @@ import {
             }
           } else {
             console.error(response);
-            throw new Error(response.message!);
+            throw new Error(response.message);
           }
         }
 

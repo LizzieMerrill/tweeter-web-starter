@@ -7,7 +7,7 @@ export const handler = async (request: PagedUserItemRequest): Promise<PagedUserI
 
     return{
         success: true,
-        message: null,
+        message: undefined,
         items: items,
         hasMore: hasMore
     }

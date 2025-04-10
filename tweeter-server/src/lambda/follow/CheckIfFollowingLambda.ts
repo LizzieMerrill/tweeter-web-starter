@@ -6,7 +6,7 @@ export const handler = async (request: CheckIfFollowerRequest): Promise<CheckIfF
     const follower = await userService.getIsFollowerStatus(request.token, request.user, request.selectedUser);
     return{
         success: true,
-        message: null,
+        message: undefined,
         follower: follower
     }
 }
