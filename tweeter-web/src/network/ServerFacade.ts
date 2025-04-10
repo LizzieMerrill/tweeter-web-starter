@@ -1,4 +1,6 @@
 import {
+  AuthResponse,
+  AuthToken,
   CheckIfFollowerRequest,
   CheckIfFollowerResponse,
   GetFollowCountsRequest,
@@ -16,7 +18,8 @@ import {
     Status,
     ToggleFollowingRequest,
     TweeterResponse,
-    User
+    User,
+    UserDto
   } from "tweeter-shared";
   import { ClientCommunicator } from "./ClientCommunicator";
   
@@ -152,15 +155,17 @@ import {
       //login
       public async login(
         request: LoginRequest
-      ): Promise<void> {
+      ): Promise<[UserDto, AuthToken]> {
         const response = await this.clientCommunicator.doPost<
           LoginRequest,
-          TweeterResponse
+          AuthResponse
         >(request, "/auth/login");
 
         // Handle errors    
         if (response.success) {
-          //?
+          const userDto = response.userDto;
+          const authToken = response.authToken;
+          return [userDto, authToken];
         } else {
           console.error(response);
           throw new Error(response.message!);
@@ -192,15 +197,17 @@ import {
       //register
       public async register(
         request: RegisterRequest
-      ): Promise<void> {
+      ): Promise<[UserDto, AuthToken]> {
         const response = await this.clientCommunicator.doPost<
           RegisterRequest,
-          TweeterResponse
+          AuthResponse
         >(request, "/auth/register");
         
         // Handle errors    
         if (response.success) {
-          //?
+          const userDto = response.userDto;
+          const authToken = response.authToken;
+          return [userDto, authToken];
         } else {
           console.error(response);
           throw new Error(response.message!);

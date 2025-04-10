@@ -11,16 +11,13 @@ export class UserService {
     alias: string,
     password: string
   ): Promise<[User, AuthToken]>{
-    const authToken = AuthToken.Generate();
-    const token = authToken.token;
-    const user = await this.serverFacade.getUser({token, alias});
-    
+
+    const [userDto, authToken] = await this.serverFacade.login({alias, password});
+    const user = User.fromDto(userDto);
+
     if (user === null) {
       throw new Error("Invalid alias or password");
     }
-    
-
-    this.serverFacade.login({alias, password});
     return [user, authToken];
   };
 
@@ -47,15 +44,13 @@ export class UserService {
         Buffer.from(userImageBytes).toString("base64");
   
       // TODO: Replace with the result of calling the server
-      const authToken = AuthToken.Generate();
-      const token = authToken.token;
-      const user = await this.serverFacade.getUser({token, alias});
+      const [userDto, authToken] = await this.serverFacade.register({firstName, lastName, alias, password, userImageBytes, imageFileExtension});
+      const user = User.fromDto(userDto);
   
       if (user === null) {
         throw new Error("Invalid registration");
       }
   
-      this.serverFacade.register({firstName, lastName, alias, password, userImageBytes, imageFileExtension});
       return [user, authToken];
     };
 
