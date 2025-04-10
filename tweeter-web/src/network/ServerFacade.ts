@@ -93,23 +93,24 @@ import {
     //getStoryItems
     public async getStoryItems(
       request: PagedStatusItemRequest
-    ): Promise<[Status, boolean]> {
+    ): Promise<[Status[], boolean]> {
       const response = await this.clientCommunicator.doPost<
         PagedStatusItemRequest,
         PagedStatusItemResponse
       >(request, "/user/getStoryItems");
   
-      // Convert the StatusDto returned by ClientCommunicator to a SStatus
-      const lastItem: Status | null =
-        response.success && response.lastItem
-          ? Status.fromDto(response.lastItem) : null;
+      // Convert the UserDto array returned by ClientCommunicator to a User array
+      const items: Status[] | null =
+        response.success && response.items
+          ? response.items.map((dto) => Status.fromDto(dto) as Status)
+          : null;
   
       // Handle errors    
       if (response.success) {
-        if (lastItem == null) {
+        if (items == null) {
           throw new Error(`No story items found`);
         } else {
-          return [lastItem, response.hasMore];
+          return [items, response.hasMore];
         }
       } else {
         console.error(response);
@@ -122,23 +123,24 @@ import {
         //getFeedItems
         public async getFeedItems(
           request: PagedStatusItemRequest
-        ): Promise<[Status, boolean]> {
+        ): Promise<[Status[], boolean]> {
           const response = await this.clientCommunicator.doPost<
             PagedStatusItemRequest,
             PagedStatusItemResponse
           >(request, "/user/getFeedItems");
       
-      // Convert the StatusDto returned by ClientCommunicator to a SStatus
-      const lastItem: Status | null =
-        response.success && response.lastItem
-          ? Status.fromDto(response.lastItem) : null;
+          // Convert the UserDto array returned by ClientCommunicator to a User array
+          const items: Status[] | null =
+            response.success && response.items
+              ? response.items.map((dto) => Status.fromDto(dto) as Status)
+              : null;
       
           // Handle errors    
           if (response.success) {
-            if (lastItem == null) {
+            if (items == null) {
               throw new Error(`No feed items found`);
             } else {
-              return [lastItem, response.hasMore];
+              return [items, response.hasMore];
             }
           } else {
             console.error(response);

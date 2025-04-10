@@ -11,7 +11,7 @@ export class StatusService {
         userAlias: string,
         pageSize: number,
         lastItem: Status | null
-      ): Promise<[Status[], boolean]> {
+      ): Promise<[Status, boolean]> {
         // TODO: Replace with the result of calling server
         const token = authToken.token;
         return this.serverFacade.getStoryItems({token, userAlias, pageSize, lastItem});
@@ -23,7 +23,7 @@ export class StatusService {
         userAlias: string,
         pageSize: number,
         lastItem: Status | null
-      ): Promise<[Status[], boolean]> {
+      ): Promise<[Status, boolean]> {
         const token = authToken.token;
         return this.serverFacade.getFeedItems({token, userAlias, pageSize, lastItem});
       };
