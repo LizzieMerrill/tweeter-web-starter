@@ -6,6 +6,6 @@ export const handler = async (request: ToggleFollowingRequest): Promise<TweeterR
     await userService.follow(request.token, request.userToFollowOrUnfollow);
     return {
         success: true,
-        message: null
+        message: undefined
     }
 }
