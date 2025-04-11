@@ -9,21 +9,23 @@ export class FollowService {
         authToken: AuthToken,
         userAlias: string,
         pageSize: number,
-        lastItem: User | null
+        lastItemUser: User | null
       ): Promise<[User[], boolean]> {
         // TODO: Replace with the result of calling server
         const token = authToken.token;
-        return this.serverFacade.getMoreFollowers({token, userAlias, pageSize, lastItem});//FakeData.instance.getPageOfUsers(lastItem, pageSize, userAlias);
+        const lastItem = lastItemUser ? lastItemUser.dto : null;
+        return this.serverFacade.getMoreFollowers({token, userAlias, pageSize, lastItem});
       };
     
       public async loadMoreFollowees (
         authToken: AuthToken,
         userAlias: string,
         pageSize: number,
-        lastItem: User | null
+        lastItemUser: User | null
       ): Promise<[User[], boolean]> {
         // TODO: Replace with the result of calling server
         const token = authToken.token;
+        const lastItem = lastItemUser ? lastItemUser.dto : null;
         return this.serverFacade.getMoreFollowers({token, userAlias, pageSize, lastItem});
       };
 }

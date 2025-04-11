@@ -15,7 +15,7 @@ describe("ServerFacade Integration Test - Register", () => {
       lastName: "User",
       alias: "testUser",
       password: "password",
-      userImageBytes: new Uint8Array(),
+      userImageBytes: Buffer.from(new Uint8Array()).toString("base64"),
       imageFileExtension: ".png"
     };
 

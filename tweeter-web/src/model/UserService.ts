@@ -36,12 +36,12 @@ export class UserService {
       lastName: string,
       alias: string,
       password: string,
-      userImageBytes: Uint8Array,
+      userImageBytesItem: Uint8Array,
       imageFileExtension: string
     ): Promise<[User, AuthToken]> {
       // Not neded now, but will be needed when you make the request to the server in milestone 3
-      const imageStringBase64: string =
-        Buffer.from(userImageBytes).toString("base64");
+      const userImageBytes: string =
+        Buffer.from(userImageBytesItem).toString("base64");
   
       // TODO: Replace with the result of calling the server
       const [userDto, authToken] = await this.serverFacade.register({firstName, lastName, alias, password, userImageBytes, imageFileExtension});
