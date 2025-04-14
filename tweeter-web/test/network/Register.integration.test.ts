@@ -1,6 +1,7 @@
 import "isomorphic-fetch";
 import { ServerFacade } from "../../src/network/ServerFacade";
 import { RegisterRequest, TweeterResponse } from "tweeter-shared";
+import { Buffer } from "buffer";
 
 describe("ServerFacade Integration Test - Register", () => {
   let serverFacade: ServerFacade;
