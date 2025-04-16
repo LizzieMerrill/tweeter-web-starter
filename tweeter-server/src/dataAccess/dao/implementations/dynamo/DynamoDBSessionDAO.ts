@@ -1,8 +1,10 @@
 import * as AWS from "aws-sdk";
 import { ISessionDAO } from "../../interfaces/ISessionDAO";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const docClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-1" });
-const SESSIONS_TABLE = process.env.SESSIONS_TABLE || "sessions";
+const AUTH_TOKENS_TABLE = process.env.AUTH_TOKENS_TABLE || "auth_tokens";
 
 export class DynamoDBSessionDAO implements ISessionDAO {
   async createSession(
@@ -12,7 +14,7 @@ export class DynamoDBSessionDAO implements ISessionDAO {
     lastActivity: number
   ): Promise<void> {
     const params = {
-      TableName: SESSIONS_TABLE,
+      TableName: AUTH_TOKENS_TABLE,
       Item: {
         token,
         alias,
@@ -26,7 +28,7 @@ export class DynamoDBSessionDAO implements ISessionDAO {
 
   async getSession(token: string): Promise<{ token: string; alias: string; expiresAt: number; lastActivity: number } | null> {
     const params = {
-      TableName: SESSIONS_TABLE,
+      TableName: AUTH_TOKENS_TABLE,
       Key: { token }
     };
     const result = await docClient.get(params).promise();
@@ -41,7 +43,7 @@ export class DynamoDBSessionDAO implements ISessionDAO {
       expressionAttributeValues[":ea"] = newExpiresAt;
     }
     const params = {
-      TableName: SESSIONS_TABLE,
+      TableName: AUTH_TOKENS_TABLE,
       Key: { token },
       UpdateExpression: updateExpression,
       ExpressionAttributeValues: expressionAttributeValues
@@ -51,7 +53,7 @@ export class DynamoDBSessionDAO implements ISessionDAO {
 
   async deleteSession(token: string): Promise<void> {
     const params = {
-      TableName: SESSIONS_TABLE,
+      TableName: AUTH_TOKENS_TABLE,
       Key: { token }
     };
     await docClient.delete(params).promise();

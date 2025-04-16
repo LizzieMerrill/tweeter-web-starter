@@ -1,11 +1,13 @@
 import * as AWS from "aws-sdk";
 import { IStatusDAO } from "../../interfaces/IStatusDAO";
 import { StatusDto } from "tweeter-shared";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const docClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-1" });
 const STATUSES_TABLE = process.env.STATUSES_TABLE || "statuses";
 const FEEDS_TABLE = process.env.FEEDS_TABLE || "feeds";
-const FOLLOWERS_TABLE = process.env.FOLLOWERS_TABLE || "followers";
+const FOLLOWS_TABLE = process.env.FOLLOWS_TABLE || "follows";
 const BATCH_WRITE_LIMIT = 25;
 
 export class DynamoDBStatusDAO implements IStatusDAO {
@@ -75,7 +77,7 @@ export class DynamoDBStatusDAO implements IStatusDAO {
 
     // 2) Retrieve all followers for the posting user.
     const followerParams: AWS.DynamoDB.DocumentClient.QueryInput = {
-      TableName: FOLLOWERS_TABLE,
+      TableName: FOLLOWS_TABLE,
       KeyConditionExpression: "followeeAlias = :ua",
       ExpressionAttributeValues: { ":ua": newStatus.user.alias }
     };

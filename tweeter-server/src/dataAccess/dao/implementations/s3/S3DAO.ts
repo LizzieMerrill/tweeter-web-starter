@@ -1,9 +1,11 @@
 import * as AWS from "aws-sdk";
 import { IS3DAO } from "../../interfaces/IS3DAO";
 import { Buffer } from "buffer";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const s3 = new AWS.S3({ region: "us-east-1" });
-const S3_BUCKET = process.env.S3_BUCKET || "my-s3-bucket";
+const S3_BUCKET = process.env.S3_BUCKET || "cs340milestone3lizziemerrill";
 
 export class S3DAO implements IS3DAO {
   async uploadProfileImage(

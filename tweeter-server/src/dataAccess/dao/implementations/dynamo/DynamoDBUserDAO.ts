@@ -3,11 +3,13 @@ import * as AWS from "aws-sdk";
 import * as bcrypt from "bcryptjs";
 import { IUserDAO } from "../../interfaces/IUserDAO";
 import { UserDto, AuthToken } from "tweeter-shared";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const docClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-1" });
 const USERS_TABLE = process.env.USERS_TABLE || "users";
 // For this implementation we use the followees table to check if a user is following another:
-const FOLLOWEES_TABLE = process.env.FOLLOWEES_TABLE || "followees";
+const FOLLOWS_TABLE = process.env.FOLLOWS_TABLE || "follows";
 
 export class DynamoDBUserDAO implements IUserDAO {
   async getUserByAlias(alias: string): Promise<UserDto | null> {
@@ -86,7 +88,7 @@ export class DynamoDBUserDAO implements IUserDAO {
   async getIsFollowerStatus(userAlias: string, selectedUserAlias: string): Promise<boolean> {
     // Using the followees table: if userAlias is following selectedUserAlias, an item should exist.
     const params = {
-      TableName: FOLLOWEES_TABLE,
+      TableName: FOLLOWS_TABLE,
       Key: {
         followerAlias: userAlias,
         followeeAlias: selectedUserAlias

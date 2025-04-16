@@ -1,10 +1,11 @@
 import * as AWS from "aws-sdk";
 import { IFollowDAO } from "../../interfaces/IFollowDAO";
 import { UserDto } from "tweeter-shared";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const docClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-1" });
-const FOLLOWERS_TABLE = process.env.FOLLOWERS_TABLE || "followers";
-const FOLLOWEES_TABLE = process.env.FOLLOWEES_TABLE || "followees";
+const FOLLOWS_TABLE = process.env.FOLLOWS_TABLE || "follows";
 const USERS_TABLE = process.env.USERS_TABLE || "users";
 
 export class DynamoDBFollowDAO implements IFollowDAO {
@@ -14,7 +15,7 @@ export class DynamoDBFollowDAO implements IFollowDAO {
     lastItem?: UserDto | null
   ): Promise<[UserDto[], boolean]> {
     const params: AWS.DynamoDB.DocumentClient.QueryInput = {
-      TableName: FOLLOWERS_TABLE,
+      TableName: FOLLOWS_TABLE,
       KeyConditionExpression: "followeeAlias = :alias",
       ExpressionAttributeValues: { ":alias": userAlias },
       Limit: pageSize
@@ -39,7 +40,7 @@ export class DynamoDBFollowDAO implements IFollowDAO {
     lastItem?: UserDto | null
   ): Promise<[UserDto[], boolean]> {
     const params: AWS.DynamoDB.DocumentClient.QueryInput = {
-      TableName: FOLLOWEES_TABLE,
+      TableName: FOLLOWS_TABLE,
       KeyConditionExpression: "followerAlias = :alias",
       ExpressionAttributeValues: { ":alias": userAlias },
       Limit: pageSize
@@ -60,12 +61,12 @@ export class DynamoDBFollowDAO implements IFollowDAO {
 
   async follow(followerAlias: string, followeeAlias: string): Promise<void> {
     const putFollowees = {
-      TableName: FOLLOWEES_TABLE,
+      TableName: FOLLOWS_TABLE,
       Item: { followerAlias, followeeAlias },
       ConditionExpression: "attribute_not_exists(followerAlias) AND attribute_not_exists(followeeAlias)"
     };
     const putFollowers = {
-      TableName: FOLLOWERS_TABLE,
+      TableName: FOLLOWS_TABLE,
       Item: { followeeAlias, followerAlias },
       ConditionExpression: "attribute_not_exists(followeeAlias) AND attribute_not_exists(followerAlias)"
     };
@@ -76,8 +77,8 @@ export class DynamoDBFollowDAO implements IFollowDAO {
   }
 
   async unfollow(followerAlias: string, followeeAlias: string): Promise<void> {
-    const delFollowees = { TableName: FOLLOWEES_TABLE, Key: { followerAlias, followeeAlias } };
-    const delFollowers = { TableName: FOLLOWERS_TABLE, Key: { followeeAlias, followerAlias } };
+    const delFollowees = { TableName: FOLLOWS_TABLE, Key: { followerAlias, followeeAlias } };
+    const delFollowers = { TableName: FOLLOWS_TABLE, Key: { followeeAlias, followerAlias } };
     await Promise.all([
       docClient.delete(delFollowees).promise(),
       docClient.delete(delFollowers).promise()
