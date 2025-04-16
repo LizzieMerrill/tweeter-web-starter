@@ -8,6 +8,8 @@
   "author": "JWilkerson",
   "license": "ISC",
   "dependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "aws-sdk": "^2.1692.0",
     "isomorphic-fetch": "^3.0.0",
     "rimraf": "^5.0.5",
     "vite-plugin-dts": "^3.7.3"
