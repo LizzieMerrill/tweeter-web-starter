@@ -1,14 +1,10 @@
-// src/dataAccess/dao/implementations/dynamo/DynamoDBUserDAO.ts
 import * as AWS from "aws-sdk";
 import * as bcrypt from "bcryptjs";
 import { IUserDAO } from "../../interfaces/IUserDAO";
 import { UserDto, AuthToken } from "tweeter-shared";
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 const docClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-1" });
 const USERS_TABLE = process.env.USERS_TABLE || "users";
-// For this implementation we use the followees table to check if a user is following another:
 const FOLLOWS_TABLE = process.env.FOLLOWS_TABLE || "follows";
 
 export class DynamoDBUserDAO implements IUserDAO {
@@ -50,8 +46,8 @@ export class DynamoDBUserDAO implements IUserDAO {
       alias,
       firstName,
       lastName,
-      hashedPassword, // stored for password verification
-      imageUrl: userImageUrl, // mapped as needed in your domain
+      hashedPassword, //stored for password verification
+      imageUrl: userImageUrl, //mapped as needed
       createdAt: new Date().toISOString(),
       followerCount: 0,
       followeeCount: 0
@@ -66,7 +62,7 @@ export class DynamoDBUserDAO implements IUserDAO {
     await docClient.put(params).promise();
 
     const authToken = AuthToken.Generate();
-    // Exclude hashedPassword from the returned user object
+    //exclude hashedPassword from the returned user object
     const { hashedPassword: _, ...userDto } = newUser;
     return { user: userDto as UserDto, authToken };
   }
@@ -84,9 +80,7 @@ export class DynamoDBUserDAO implements IUserDAO {
     await docClient.update(params).promise();
   }
 
-  // Implement getIsFollowerStatus by checking if the user (userAlias) follows the selected user (selectedUserAlias)
   async getIsFollowerStatus(userAlias: string, selectedUserAlias: string): Promise<boolean> {
-    // Using the followees table: if userAlias is following selectedUserAlias, an item should exist.
     const params = {
       TableName: FOLLOWS_TABLE,
       Key: {
@@ -98,7 +92,7 @@ export class DynamoDBUserDAO implements IUserDAO {
     return !!result.Item;
   }
 
-  // Verify a password using bcrypt
+  //verify using bcrypt
   async verifyPassword(user: UserDto, password: string): Promise<boolean> {
     const storedHash = (user as any).hashedPassword;
     if (!storedHash) {
@@ -107,7 +101,6 @@ export class DynamoDBUserDAO implements IUserDAO {
     return await bcrypt.compare(password, storedHash);
   }
 
-  // Get follower count from the user record
   async getFollowerCount(alias: string): Promise<number> {
     const user = await this.getUserByAlias(alias);
     if (!user) {
@@ -116,7 +109,6 @@ export class DynamoDBUserDAO implements IUserDAO {
     return (user as any).followerCount || 0;
   }
 
-  // Get followee count from the user record
   async getFolloweeCount(alias: string): Promise<number> {
     const user = await this.getUserByAlias(alias);
     if (!user) {

@@ -1,8 +1,6 @@
 import * as AWS from "aws-sdk";
 import { IFollowDAO } from "../../interfaces/IFollowDAO";
 import { UserDto } from "tweeter-shared";
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 const docClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-1" });
 const FOLLOWS_TABLE = process.env.FOLLOWS_TABLE || "follows";

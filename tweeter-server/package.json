@@ -4,6 +4,7 @@
   "dependencies": {
     "@types/bcryptjs": "^2.4.6",
     "aws-sdk": "^2.1692.0",
+    "bcryptjs": "^3.0.2",
     "date-fns": "^3.3.1",
     "rimraf": "^6.0.1",
     "tweeter-shared": "file:../tweeter-shared",

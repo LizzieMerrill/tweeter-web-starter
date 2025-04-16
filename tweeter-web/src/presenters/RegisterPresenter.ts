@@ -12,7 +12,7 @@ export class RegisterPresenter extends AuthPresenter {
       this.userService = new UserService();
     }
 
-  public async doRegister () {
+  public async doRegister (firstName: string, lastName: string, alias: string, password: string, imageUrl: string, imageFileExtension: string) {
     await this.doFailureReportingOperation(async () => {
       this.view.setLoading(true);
 

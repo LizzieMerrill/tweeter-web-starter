@@ -1,7 +1,5 @@
 import * as AWS from "aws-sdk";
 import { ISessionDAO } from "../../interfaces/ISessionDAO";
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 const docClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-1" });
 const AUTH_TOKENS_TABLE = process.env.AUTH_TOKENS_TABLE || "auth_tokens";

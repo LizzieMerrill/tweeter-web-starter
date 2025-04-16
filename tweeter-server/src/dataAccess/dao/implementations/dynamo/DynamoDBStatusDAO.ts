@@ -1,8 +1,6 @@
 import * as AWS from "aws-sdk";
 import { IStatusDAO } from "../../interfaces/IStatusDAO";
 import { StatusDto } from "tweeter-shared";
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 const docClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-1" });
 const STATUSES_TABLE = process.env.STATUSES_TABLE || "statuses";
@@ -110,7 +108,6 @@ export class DynamoDBStatusDAO implements IStatusDAO {
     }
   }
 
-  // BatchWrite with retry for unprocessed items.
   private async batchWriteFeeds(
     requests: AWS.DynamoDB.DocumentClient.WriteRequests
   ): Promise<void> {
@@ -124,7 +121,7 @@ export class DynamoDBStatusDAO implements IStatusDAO {
       const result = await docClient.batchWrite(params).promise();
       unprocessed = (result.UnprocessedItems && result.UnprocessedItems[FEEDS_TABLE]) || [];
       if (unprocessed.length > 0) {
-        // Wait a bit before retrying.
+        //wait a bit before retrying
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
     } while (unprocessed.length > 0);

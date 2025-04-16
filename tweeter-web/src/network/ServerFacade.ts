@@ -198,6 +198,8 @@ import {
       public async register(
         request: RegisterRequest
       ): Promise<[UserDto, AuthToken]> {
+        console.log("Request: ");
+        console.log(request);
         const response = await this.clientCommunicator.doPost<
           RegisterRequest,
           AuthResponse
@@ -209,7 +211,7 @@ import {
           const authToken = response.authToken;
           return [userDto, authToken];
         } else {
-          console.error(response);
+          console.error(response.message);
           throw new Error(response.message!);
         }
       }
